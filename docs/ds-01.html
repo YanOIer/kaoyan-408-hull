@@ -149,6 +149,102 @@
 <h2>五、复习建议</h2>
 <p>半天即可通关：做 10 道出栈序列选择 + 5 道循环队列计算 + 默写一遍括号匹配与后缀求值代码。
 这个顶点的战略意义是：<strong>用最少的投入，封住凸包的下边界</strong>。</p>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：出栈序列合法性判断</h3>
+<p><strong>题目</strong>：元素 a, b, c, d, e 依次入栈（允许穿插出栈），下列出栈序列哪个不可能出现？
+A. d, c, e, b, a 　B. d, e, c, b, a 　C. a, b, c, d, e 　D. c, d, a, b, e</p>
+<p><strong>参考答案</strong>：选 <strong>D</strong>。</p>
+<p>逐项模拟：
+- A：push a,b,c,d → 弹 d, c → push e → 弹 e → 弹 b, a ✅
+- B：push a,b,c,d → 弹 d → push e → 弹 e → 弹 c, b, a ✅
+- C：入一个弹一个 ✅
+- D：先弹 c（此时栈内 a, b，栈顶 b），弹 d 后栈顶仍是 b，<strong>下一个只能弹 b，不可能弹 a</strong> ❌</p>
+<p><strong>判据</strong>：任何时刻，栈中元素从栈底到栈顶保持入栈的相对次序；序列中若要先出"压在下面"的元素，必不可能。</p>
+<hr />
+<h3>例题 2：循环队列计算</h3>
+<p><strong>题目</strong>：循环队列 MaxSize = 6，初始 front = rear = 0。依次执行：入队 ×5，出队 ×2，入队 ×1。求此时 front、rear 和队列长度。</p>
+<p><strong>参考答案</strong>：
+- 入队 5 次：rear = 5；出队 2 次：front = 2；再入队 1 次：rear = (5+1) % 6 = 0。
+- <strong>front = 2，rear = 0</strong>。
+- 长度 = (rear − front + MaxSize) % MaxSize = (0 − 2 + 6) % 6 = <strong>4</strong>。</p>
+<p>验算：队列中剩 5 − 2 + 1 = 4 个元素 ✅。</p>
+<hr />
+<h3>例题 3：中缀表达式转后缀</h3>
+<p><strong>题目</strong>：将中缀表达式 <code>a + b * c − (d + e)</code> 转换为后缀表达式。</p>
+<p><strong>参考答案</strong>：<code>a b c * + d e + −</code></p>
+<p>过程（栈内自下而上）：</p>
+<table>
+<thead>
+<tr>
+<th>读入</th>
+<th>栈</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td></td>
+<td>a</td>
+</tr>
+<tr>
+<td>+</td>
+<td>+</td>
+<td>a</td>
+</tr>
+<tr>
+<td>b</td>
+<td>+</td>
+<td>a b</td>
+</tr>
+<tr>
+<td>*</td>
+<td>+ *</td>
+<td>a b</td>
+</tr>
+<tr>
+<td>c</td>
+<td>+ *</td>
+<td>a b c</td>
+</tr>
+<tr>
+<td>−</td>
+<td>−（弹 * 和 +，因为 ≥ −）</td>
+<td>a b c * +</td>
+</tr>
+<tr>
+<td>(</td>
+<td>− (</td>
+<td>a b c * +</td>
+</tr>
+<tr>
+<td>d</td>
+<td>− (</td>
+<td>... d</td>
+</tr>
+<tr>
+<td>+</td>
+<td>− ( +</td>
+<td>... d</td>
+</tr>
+<tr>
+<td>e</td>
+<td>− ( +</td>
+<td>... d e</td>
+</tr>
+<tr>
+<td>)</td>
+<td>−（弹 + 和 (）</td>
+<td>... d e +</td>
+</tr>
+<tr>
+<td>结束</td>
+<td>空（弹 −）</td>
+<td>a b c * + d e + −</td>
+</tr>
+</tbody>
+</table>
 </article>
 <div class="pagenav"><a href="co-04.html">← CO-04 CPU数据通路设计</a><a href="ds-02.html">→ DS-02 二叉树与BST</a></div>
 </main>

@@ -152,6 +152,34 @@
 <li>精做 2012 / 2015 / 2018 流水线综合题，每题做到"讲给别人听"的程度；</li>
 <li>整理一页"冒险判定流程"：相邻指令 → 寄存器是否重叠 → 属于哪种相关 → 停几拍。</li>
 </ol>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：流水线性能计算</h3>
+<p><strong>题目</strong>：5 段流水线，每段 1 ns。执行 100 条指令（无冒险），求总时间、吞吐率和加速比。</p>
+<p><strong>参考答案</strong>：
+- T = (k + n − 1)·Δt = (5 + 100 − 1) × 1 ns = <strong>104 ns</strong>；
+- 吞吐率 = n / T = 100 / 104 ≈ <strong>0.96 条/ns</strong>；
+- 串行需 100 × 5 = 500 ns，加速比 S = 500 / 104 ≈ <strong>4.8</strong>（理论上限 k = 5）。</p>
+<hr />
+<h3>例题 2：数据冒险与停顿拍数</h3>
+<p><strong>题目</strong>：五段流水线，有 forwarding。指令序列：</p>
+<pre><code>I1: LOAD  R1, 0(R2)      // R1 ← M[(R2)]
+I2: ADD   R3, R1, R4     // 用 R1
+I3: SUB   R5, R1, R6     // 又用 R1
+</code></pre>
+<p>问 I2、I3 各需停顿几拍？</p>
+<p><strong>参考答案</strong>：
+- I1 的 LOAD 要到 <strong>MEM 段结束</strong>才有数据；I2 的 EX 段紧随 I1 的 MEM 段，MEM 结束时数据才能旁路 → <strong>I2 停 1 拍</strong>（经典 load-use 冒险，有旁路也躲不掉）。
+- I3 的 EX 段时 I1 早已完成 MEM → 数据经旁路可得，<strong>停 0 拍</strong>。</p>
+<p>若无 forwarding：I2 需等 I1 写回（WB）后再读 → 停 2 拍，I3 停 1 拍。</p>
+<hr />
+<h3>例题 3：流水时空图数拍</h3>
+<p><strong>题目</strong>：4 条指令走 5 段流水，I3 是条件转移指令且在 EX 段判定转移成功（转移目标地址在 EX 末确定）。问完成 4 条指令共需多少拍？被冲刷几条？</p>
+<p><strong>参考答案</strong>：
+- 无转移时 T = 5 + 4 − 1 = 8 拍；
+- I3 在 EX 段（第 5 拍）才确定转移，此时 I4、I5（已预取的顺序下两条）作废 → <strong>冲刷 2 条</strong>；
+- 实际执行 = I1、I2、I3 + 转移目标处重新取指 2 条算作 1 条有效（设目标指令为 I4'），即共 4 条有效指令（I1 I2 I3 I4'）；
+- 总拍数 = 8 + <strong>2 拍惩罚</strong> = <strong>10 拍</strong>（冲刷的 2 条白占了 2 拍流水线槽位）。</p>
 </article>
 <div class="pagenav"><a href="co-01.html">← CO-01 指令系统设计</a><a href="co-03.html">→ CO-03 Cache与存储层次</a></div>
 </main>

@@ -184,6 +184,83 @@ void BFS(Graph G, int v) {
 <li>手工模拟各做 5 题：Dijkstra 表、Prim、Kruskal、拓扑、关键路径；</li>
 <li>精做 2012/2015/2018/2022/2023 图综合题，2022 年的代码题要能达到"默写级"熟练。</li>
 </ol>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：Dijkstra 手工模拟</h3>
+<p><strong>题目</strong>：无向带权图顶点 A—E，边：AB=6, AC=3, BC=2, BD=5, CD=3, CE=4, DE=2, BE=10。求 A 到各顶点的最短路径。</p>
+<p><strong>参考答案</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>选定</th>
+<th>dist B</th>
+<th>dist C</th>
+<th>dist D</th>
+<th>dist E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>初始</td>
+<td>A</td>
+<td>6</td>
+<td>3</td>
+<td>∞</td>
+<td>∞</td>
+</tr>
+<tr>
+<td>1</td>
+<td>C(3)</td>
+<td><strong>5</strong>(3+2)</td>
+<td>—</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B(5)</td>
+<td>—</td>
+<td>—</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>D(6)</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>E(7)</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A→C = 3，A→C→B = 5，A→C→D = 6，A→C→E = 7。</li>
+<li>注意第 1 轮：经 C 松弛 B 由 6 → 5（<strong>dist 会被更新，直到该点被"选定"才锁定</strong>）。</li>
+</ul>
+<hr />
+<h3>例题 2：拓扑排序与判环</h3>
+<p><strong>题目</strong>：有向图边集 {A→B, A→C, B→D, C→D, D→E}。给出一个拓扑序列，并说明若添加边 E→B 会怎样。</p>
+<p><strong>参考答案</strong>：
+- 一个合法拓扑序列：<strong>A, C, B, D, E</strong>（A B C D E 也对——拓扑序不唯一）。
+- 添加 E→B 后形成 B→D→E→B <strong>有向环</strong> → 不存在拓扑序列。用"入度 0"算法验证：A 输出后，B/C/D/E 均无法全部入度归零（B 被 E 指着、E 被 D 指着、D 被 B、C 指着……），输出个数 &lt; 5 ⟹ 判环成立。</p>
+<hr />
+<h3>例题 3：关键路径</h3>
+<p><strong>题目</strong>：AOE 网：v1→v2(3)，v1→v3(2)，v2→v4(2)，v3→v4(4)，v4→v5(3)，v3→v5(1)。求关键路径和工期。</p>
+<p><strong>参考答案</strong>：
+- ve：ve(1)=0；ve(2)=3；ve(3)=2；ve(4)=max(3+2, 2+4)=<strong>6</strong>；ve(5)=max(6+3, 2+1)=<strong>9</strong>。
+- vl：vl(5)=9；vl(4)=9−3=6；vl(3)=min(6−4, 9−1)=2；vl(2)=6−2=4；vl(1)=min(4−3, 2−2)=0。
+- 活动余量：v3→v4：e=ve(3)=2，l=vl(4)−4=2，余量 0 ✅；v4→v5：e=6，l=6，余量 0 ✅；v1→v3：e=0，l=0，余量 0 ✅。
+- <strong>关键路径：v1→v3→v4→v5，工期 = 9</strong>。</p>
 </article>
 <div class="pagenav"><a href="ds-02.html">← DS-02 二叉树与BST</a><a href="ds-04.html">→ DS-04 灵活算法设计</a></div>
 </main>

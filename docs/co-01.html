@@ -197,6 +197,63 @@
 <li>画一张 9 种寻址方式的 EA 公式卡，配合真题练 5 题；</li>
 <li>把 2014 与 2026 两年的指令系统综合题精做，体会与数据通路的结合方式。</li>
 </ol>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：扩展操作码（经典必会题）</h3>
+<p><strong>题目</strong>：指令字长 16 位，每个地址码 4 位。已设计三地址指令 15 条、二地址指令 15 条、一地址指令 15 条，问零地址指令最多还能设计多少条？</p>
+<p><strong>参考答案</strong>：<strong>16 条</strong>。</p>
+<p>账簿推算：
+1. 三地址：OP 4 位共 16 种编码，用 15 条（0000—1110），<strong>留 1111</strong> 作扩展窗口；
+2. 二地址：1111 扩展出 16 种（1111 0000—1111 1111），用 15 条，<strong>留 1111 1111</strong>；
+3. 一地址：再扩 16 种，用 15 条，<strong>留 1111 1111 1111</strong>；
+4. 零地址：1111 1111 1111 0000 — 1111 1111 1111 1111，共 <strong>16</strong> 种全可用。</p>
+<p><strong>口诀</strong>：每留一个窗口，下一级多 2⁴ = 16 个编码。</p>
+<hr />
+<h3>例题 2：寻址方式求有效地址</h3>
+<p><strong>题目</strong>：指令中地址码 A = 200H，PC = 3000H（取指后已 +2），基址寄存器 = 1000H，变址寄存器 = 0100H，内存单元 (200H) = 4000H。分别求直接寻址、间接寻址、相对寻址、基址寻址、变址寻址的有效地址。</p>
+<p><strong>参考答案</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>寻址方式</th>
+<th>计算</th>
+<th>EA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接</td>
+<td>A</td>
+<td><strong>200H</strong></td>
+</tr>
+<tr>
+<td>间接</td>
+<td>(A)</td>
+<td><strong>4000H</strong></td>
+</tr>
+<tr>
+<td>相对</td>
+<td>(PC) + A = 3002H + 200H</td>
+<td><strong>3202H</strong></td>
+</tr>
+<tr>
+<td>基址</td>
+<td>(基址R) + A = 1000H + 200H</td>
+<td><strong>1200H</strong></td>
+</tr>
+<tr>
+<td>变址</td>
+<td>(变址R) + A = 0100H + 200H</td>
+<td><strong>0300H</strong></td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ 相对寻址用<strong>取指后</strong>的 PC 值（3000H+2），这是阅卷经典陷阱。</p>
+<hr />
+<h3>例题 3：RISC 特征辨析</h3>
+<p><strong>题目</strong>：下列关于 RISC 的叙述中，错误的是：
+A. 指令长度固定 　B. 只有 Load/Store 指令访存 　C. 主要采用微程序控制器 　D. 寄存器数量多</p>
+<p><strong>参考答案</strong>：选 <strong>C</strong>。RISC 以<strong>硬布线控制器</strong>为主（指令规整、执行快）；微程序控制器是 CISC 的典型实现方式。A、B、D 均为 RISC 正确特征。</p>
 </article>
 <div class="pagenav"><a href="cn-03.html">← CN-03 TCP连接与拥塞控制</a><a href="co-02.html">→ CO-02 指令流水线</a></div>
 </main>

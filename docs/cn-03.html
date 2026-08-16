@@ -152,6 +152,90 @@
 <li>做 5 组拥塞窗口逐 RTT 填表练习（混合超时与快恢复事件）；</li>
 <li>精做 2011/2014/2017/2020/2023/2026 六道真题，把"读抓包表"练成直觉。</li>
 </ol>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：三次握手序号追踪</h3>
+<p><strong>题目</strong>：A 向 B 发起连接，A 的初始序号 100。写出三次握手各报文的 seq / ack，并回答：若第二次握手的报文丢失，会发生什么？</p>
+<p><strong>参考答案</strong>：
+1. A→B：SYN=1, seq=100；
+2. B→A：SYN=1, ACK=1, seq=y（B 自己的初始序号）, <strong>ack=101</strong>（SYN 占一个序号）；
+3. A→B：ACK=1, seq=101, ack=y+1。</p>
+<p>第二次握手丢失：A 超时<strong>重传第一次的 SYN</strong>；B 收到重传 SYN 后重发 SYN+ACK。
+三次握手的必要性正在于此：若只要两次，B 无法确认 A 收到了自己的序号协商。</p>
+<hr />
+<h3>例题 2：拥塞窗口逐 RTT 填表（必考题型）</h3>
+<p><strong>题目</strong>：初始 cwnd = 1 MSS，ssthresh = 16 MSS。第 8 个 RTT 结束时发生超时；之后第 13 个 RTT 结束收到 3 个冗余 ACK。列出各 RTT 的 cwnd。</p>
+<p><strong>参考答案</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>RTT</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cwnd</td>
+<td>1→2</td>
+<td>2→4</td>
+<td>4→8</td>
+<td>8→16</td>
+<td>16→17</td>
+<td>17→18</td>
+<td>18→19</td>
+<td>19→20</td>
+</tr>
+</tbody>
+</table>
+<p>（RTT 1—4 慢开始指数增长；到 ssthresh=16 后转拥塞避免线性 +1）</p>
+<ul>
+<li>超时处理：ssthresh = 20/2 = <strong>10</strong>，cwnd = <strong>1</strong>，重新慢开始：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>RTT</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cwnd</td>
+<td>1→2</td>
+<td>2→4</td>
+<td>4→8</td>
+<td>8→10</td>
+<td>10→11</td>
+<td>11→12</td>
+<td>12→13</td>
+</tr>
+</tbody>
+</table>
+<p>（RTT 12 到 ssthresh=10 转线性；RTT 13 末收到 3 个冗余 ACK）</p>
+<ul>
+<li>快恢复：ssthresh = 13/2 ≈ <strong>6</strong>（取整按题目约定，常为 ⌊13/2⌋=6），cwnd = ssthresh = <strong>6</strong>（不减到 1），继续拥塞避免：RTT 14 起 cwnd = 7, 8, …</li>
+</ul>
+<p>⚠️ <strong>超时回 1、冗余 ACK 回一半</strong>——这是全 408 最经典的辨析点之一。</p>
+<hr />
+<h3>例题 3：四次挥手与 TIME_WAIT</h3>
+<p><strong>题目</strong>：A 主动关闭连接，最后一个 ACK 发出后进入 TIME_WAIT，等待 2MSL。问：(1) 为什么不是收到 B 的 FIN 就直接关闭？(2) MSL = 30 s，A 最少多久后彻底关闭？</p>
+<p><strong>参考答案</strong>：
+- (1) ① 最后那个 ACK 若丢失，B 会超时重传 FIN，TIME_WAIT 保证 A 还在、能补 ACK；
+  ② 等够 2MSL 让本连接所有报文都从网络中消亡，避免"亡灵报文"串扰<strong>下一同名连接</strong>。
+- (2) 2 × 30 = <strong>60 s</strong>。</p>
 </article>
 <div class="pagenav"><a href="cn-02.html">← CN-02 IP子网划分与路由聚合</a><a href="co-01.html">→ CO-01 指令系统设计</a></div>
 </main>

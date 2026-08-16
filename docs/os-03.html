@@ -185,6 +185,36 @@ philosopher(i) {
 <li>精做 2010/2013/2016/2019/2022/2025 六道真题，感受从"经典"到"变种"的演变；</li>
 <li>每周自造一道同步题（如：理发店、公交车司机售票员、水果盘）并完整求解。</li>
 </ol>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：信号量取值含义</h3>
+<p><strong>题目</strong>：某信号量 S 当前 value = −3，说明什么？若此时再执行一次 V(S)，value 变为多少、会发生什么？</p>
+<p><strong>参考答案</strong>：
+- value = −3：资源已分配完，且<strong>等待队列中有 3 个进程</strong>；
+- V(S)：value −3 → −2，因 value ≤ 0，<strong>唤醒队首一个等待进程</strong>；唤醒后等待者剩 2 个。</p>
+<hr />
+<h3>例题 2：水果盘问题（经典变种，会默写）</h3>
+<p><strong>题目</strong>：盘子容量 1。爸爸专放苹果，妈妈专放橘子，女儿专吃苹果，儿子专吃橘子。用 P/V 写出四个进程的同步方案。</p>
+<p><strong>参考答案</strong>：</p>
+<pre><code class="language-c">semaphore plate = 1;     // 盘子可放（空位）
+semaphore apple = 0;     // 盘中有苹果
+semaphore orange = 0;    // 盘中有橘子
+
+dad()   { while(1){ P(plate); 放苹果; V(apple); } }
+mom()   { while(1){ P(plate); 放橘子; V(orange); } }
+girl()  { while(1){ P(apple); 取苹果; V(plate); } }
+boy()   { while(1){ P(orange); 取橘子; V(plate); } }
+</code></pre>
+<p><strong>要点</strong>：盘子容量为 1 时，plate 一个信号量天然保证了"放/取"互斥，<strong>无需再加 mutex</strong>；
+若容量 &gt; 1，则必须另加 mutex = 1 保护盘子的装入/取出动作。</p>
+<hr />
+<h3>例题 3：同步 P 先于互斥 P（死锁辨析）</h3>
+<p><strong>题目</strong>：生产者—消费者中，把 P 操作顺序写成 <code>P(mutex); P(empty);</code> 会有什么后果？</p>
+<p><strong>参考答案</strong>：<strong>可能死锁</strong>。</p>
+<p>反例：缓冲池满（empty = 0）时，生产者先抢到 mutex（mutex 1→0），再 P(empty) 阻塞——
+此时消费者想 P(mutex) 取货，却被生产者优先占着 mutex，也阻塞。
+双方互等：生产者等"空位"（只有消费者能制造），消费者等 mutex（只有生产者能放）→ <strong>循环等待，死锁</strong>。</p>
+<p>正确写法：<code>P(empty); P(mutex);</code> —— <strong>先确保有资源，再进入临界区</strong>。</p>
 </article>
 <div class="pagenav"><a href="os-02.html">← OS-02 文件系统</a><span></span></div>
 </main>

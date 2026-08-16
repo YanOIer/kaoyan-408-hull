@@ -206,6 +206,38 @@
 <li>自制一张空白单总线数据通路图，随机抽指令（LOAD / STORE / ADD / JMP / 间址指令）练习写全程；</li>
 <li>与流水线打通：同一条指令在五段流水里各做什么，与多周期的微操作对照理解。</li>
 </ol>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：写出 LOAD 指令的完整微操作序列</h3>
+<p><strong>题目</strong>：单总线数据通路（含 PC、IR、MAR、MDR、Y、Z、R0—R3），写出 <code>LOAD R1, (R2)</code>（R1 ← M[(R2)]）的取指 + 执行微操作及控制信号。</p>
+<p><strong>参考答案</strong>：</p>
+<p><strong>取指周期</strong>（所有指令相同）：</p>
+<pre><code>T1: (PC) → MAR            PCout, MARin
+T2: M(MAR) → MDR          MEMR（读）; (PC)+1 → PC：PCout, +1
+T3: (MDR) → IR            MDRout, IRin
+</code></pre>
+<p><strong>执行周期</strong>：</p>
+<pre><code>T4: (R2) → MAR            R2out, MARin        // 形式地址 = (R2)
+T5: M(MAR) → MDR          MEMR                // 读主存
+T6: (MDR) → R1            MDRout, R1in        // 写入目标寄存器
+</code></pre>
+<p>共 6 拍。注意：LOAD 不用 ALU，无需经 Y/Z 暂存。</p>
+<hr />
+<h3>例题 2：单总线 ADD 指令的节拍</h3>
+<p><strong>题目</strong>：同上通路，写出 <code>ADD R0, R1</code>（R0 ← (R0)+(R1)）的执行周期微操作，并说明为什么比双总线多一拍。</p>
+<p><strong>参考答案</strong>：</p>
+<pre><code>T1: (R0) → Y              R0out, Yin     // 一个操作数先进暂存器
+T2: (R1) + (Y) → Z        R1out, ADD, Zin
+T3: (Z) → R0              Zout, R0in
+</code></pre>
+<p><strong>为什么多一拍</strong>：单总线同一时刻只能传一个数据，ALU 的两个操作数不能同时送达，必须先把 R0 锁进暂存器 Y。双总线结构可让 R0、R1 同拍到达 ALU 两端，执行周期可省一拍（2 拍完成）。</p>
+<hr />
+<h3>例题 3：微程序控制器概念题</h3>
+<p><strong>题目</strong>：微程序存放在（　）中。
+A. 主存 　B. 控制存储器 　C. 指令寄存器 　D. 通用寄存器</p>
+<p><strong>参考答案</strong>：选 <strong>B</strong>。</p>
+<p>微程序由微指令组成，存放在 CPU 内部的<strong>控制存储器（CM）</strong>中，是只读的、出厂固化（或可微码更新）的。<strong>主存里放的是机器指令</strong>，不是微指令——这是最高频的混淆点。</p>
+<p>补充：一条机器指令 ⟺ 一段微程序；微指令 = 操作控制字段（发出哪些控制信号）+ 顺序控制字段（下一条微指令地址怎么来）。</p>
 </article>
 <div class="pagenav"><a href="co-03.html">← CO-03 Cache与存储层次</a><a href="ds-01.html">→ DS-01 栈与队列应用</a></div>
 </main>

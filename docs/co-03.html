@@ -166,6 +166,73 @@
 <li>手工模拟 5 组访问序列（含 LRU），画出每步 Cache 状态；</li>
 <li>精做 2013/2017/2020/2021/2025 五年 Cache 综合题——它们是同一道题的五次换装。</li>
 </ol>
+<hr />
+<h2>例题精练（附答案）</h2>
+<h3>例题 1：Cache 地址划分（必考基本功）</h3>
+<p><strong>题目</strong>：主存 32 位地址，Cache 数据容量 64 KB，块大小 64 B，4 路组相联。求标记、组号、块内地址各多少位。</p>
+<p><strong>参考答案</strong>：
+1. 块内地址 = log₂64 = <strong>6 位</strong>；
+2. Cache 行数 = 64 KB ÷ 64 B = 1024 行；组数 = 1024 ÷ 4 = 256 组 → 组号 = log₂256 = <strong>8 位</strong>；
+3. 标记 = 32 − 8 − 6 = <strong>18 位</strong>。</p>
+<p>验算：18 + 8 + 6 = 32 ✅。</p>
+<hr />
+<h3>例题 2：命中率与平均访问时间</h3>
+<p><strong>题目</strong>：Cache 存取时间 Tc = 10 ns，主存 Tm = 100 ns，命中率 95%。采用"先查 Cache、缺失再访主存"方式，求平均访问时间。</p>
+<p><strong>参考答案</strong>：
+- 缺失时总耗时 = Tc + Tm = 110 ns（先白查一次 Cache）；
+- Ta = 0.95 × 10 + 0.05 × 110 = 9.5 + 5.5 = <strong>15 ns</strong>；
+- 等价公式：Ta = Tc + (1−h)·Tm = 10 + 0.05 × 100 = 15 ns ✅。</p>
+<p>若命中率提升到 99%：Ta = 10 + 1 = 11 ns——<strong>命中率每涨 1%，Ta 降 1 ns</strong>，这就是 Cache 的意义。</p>
+<hr />
+<h3>例题 3：直接映射命中追踪</h3>
+<p><strong>题目</strong>：直接映射 Cache 共 4 行，块大小 1 字。主存按字编址，依次访问地址 0, 8, 0, 6, 8。问每次是否命中？最终 Cache 内容？</p>
+<p><strong>参考答案</strong>：直接映射行号 = 地址 mod 4。</p>
+<table>
+<thead>
+<tr>
+<th>访问</th>
+<th>映射行</th>
+<th>结果</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>行 0</td>
+<td>缺失</td>
+<td>装入块 0</td>
+</tr>
+<tr>
+<td>8</td>
+<td>行 0（8 mod 4 = 0）</td>
+<td>缺失</td>
+<td><strong>冲突</strong>，块 0 被挤出，装入块 8</td>
+</tr>
+<tr>
+<td>0</td>
+<td>行 0</td>
+<td>缺失</td>
+<td>又冲突，换回块 0（抖动！）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>行 2</td>
+<td>缺失</td>
+<td>装入块 6</td>
+</tr>
+<tr>
+<td>8</td>
+<td>行 0</td>
+<td>缺失</td>
+<td>块 8 又被换回</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>命中率 0/5——直接映射的<strong>抖动</strong>典型案例；</li>
+<li>若改成 2 路组相联（2 组 × 2 行），0 和 8 同组但各占一路，后三次全命中——这就是"相联度"的价值。</li>
+</ul>
 </article>
 <div class="pagenav"><a href="co-02.html">← CO-02 指令流水线</a><a href="co-04.html">→ CO-04 CPU数据通路设计</a></div>
 </main>
