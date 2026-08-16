@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CO-04 CPU数据通路设计 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x on" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #1f6f8b">
+<h1>CO-04 CPU 数据通路设计</h1>
+<blockquote>
+<p>凸包顶点 · 组成原理 | 考频：<strong>7 次</strong>综合题（2016 / 2019 / 2022 / 2023 / 2024 / 2025 / 2026）| 难度：★★★★★
+定位：408 全卷最硬的顶点——考频最高、难度最高的"双料冠军"，组原综合题的固定席位。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>数据通路以 <strong>7 次考频 + 5 星难度</strong> 雄踞凸包最右上角，是整个 408 知识空间中
+"离原点最远"的点。2016 年固定为综合大题后从未缺席，2024—2026 连续三年出现。
+<strong>拿下数据通路 ≈ 拿下组原的半壁江山。</strong></p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 数据通路的基本部件</h3>
+<table>
+<thead>
+<tr>
+<th>部件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC</td>
+<td>存放下条指令地址</td>
+</tr>
+<tr>
+<td>IR</td>
+<td>存放当前指令</td>
+</tr>
+<tr>
+<td>MAR / MDR</td>
+<td>访存地址/数据寄存器</td>
+</tr>
+<tr>
+<td>ALU + 暂存器</td>
+<td>运算；单总线结构需暂存器暂存一个操作数</td>
+</tr>
+<tr>
+<td>通用寄存器组</td>
+<td>操作数与结果</td>
+</tr>
+<tr>
+<td>三态门 / 多路选择器</td>
+<td>控制数据流向</td>
+</tr>
+<tr>
+<td>控制单元 CU</td>
+<td>发出微操作控制信号</td>
+</tr>
+</tbody>
+</table>
+<h3>2.2 指令执行的微操作序列（核心能力）</h3>
+<p>标准流程：<strong>取指（所有指令相同）→ 间址（可选）→ 执行 → 中断检查</strong>。</p>
+<p><strong>取指周期</strong>（必背，任何题的第一段）：</p>
+<pre><code>节拍1: (PC) → MAR          控制信号: PCout, MARin
+节拍2: 1 → R/W(读); M(MAR) → MDR;  (PC)+1 → PC
+节拍3: (MDR) → IR          控制信号: MDRout, IRin
+       CU 对 IR 中操作码译码
+</code></pre>
+<p><strong>执行周期示例</strong>（加法 ADD R0, (R1)，单总线模型）：</p>
+<pre><code>(R1) → MAR → 读主存 → MDR → Y(暂存)
+(R0) + (Y) → Z → R0
+</code></pre>
+<p>写微操作的三条军规：
+1. <strong>每个节拍内，总线上只能有一个来源</strong>（单总线模型）；
+2. 控制信号成对出现：<code>Xout</code> 与 <code>Yin</code> 同时有效才能完成 X→Y；
+3. 需要 ALU 运算时，一个操作数必须先进暂存器 Y。</p>
+<h3>2.3 单周期 / 多周期 / 流水对比</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>单周期</th>
+<th>多周期</th>
+<th>流水线</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPI</td>
+<td>1</td>
+<td>&gt;1（指令间不同）</td>
+<td>理想 1</td>
+</tr>
+<tr>
+<td>时钟周期</td>
+<td>最长指令决定（很长）</td>
+<td>最长微操作决定（短）</td>
+<td>最长段决定</td>
+</tr>
+<tr>
+<td>硬件</td>
+<td>部件不能复用</td>
+<td>部件可复用</td>
+<td>段间加寄存器</td>
+</tr>
+</tbody>
+</table>
+<h3>2.4 硬布线 vs 微程序控制器</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>硬布线</th>
+<th>微程序</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>速度</td>
+<td>快</td>
+<td>慢</td>
+</tr>
+<tr>
+<td>设计/修改</td>
+<td>难</td>
+<td>易（改微码）</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>RISC</td>
+<td>CISC</td>
+</tr>
+<tr>
+<td>核心概念</td>
+<td>状态机</td>
+<td>微指令 = 控制信号集合；微程序存于<strong>控制存储器 CM</strong></td>
+</tr>
+</tbody>
+</table>
+<p>微指令格式：操作控制字段 + 顺序控制字段（下址字段/断定方式）。</p>
+<hr />
+<h2>三、典型考法</h2>
+<ol>
+<li><strong>补全微操作序列</strong>：给数据通路图 + 指令，写出取指+执行的逐拍微操作和控制信号。</li>
+<li><strong>数据通路设计</strong>：给指令集需求，设计通路结构（选部件、连总线）。</li>
+<li><strong>节拍计算</strong>：单总线/双总线/三总线下某指令需要几拍，CPI 多少。</li>
+<li><strong>微程序设计</strong>：确定微指令格式、微地址形成方式、控存容量。</li>
+</ol>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ 取指阶段 <code>(PC)+1→PC</code> 的"1"是指令字长对应的地址增量，按字节编址且指令 32 位时可能是 +4。</li>
+<li>⚠️ 单总线模型 ALU 的两个操作数<strong>不能同拍上传</strong>——必须一个先存 Y。</li>
+<li>⚠️ MDR 与主存的数据交换方向：读是 M(MAR)→MDR，写是 MDR→M(MAR)，控制信号不同。</li>
+<li>⚠️ 写控制信号时 <code>out</code>/<code>in</code> 配对漏一个是阅卷扣分重灾区。</li>
+<li>⚠️ 微程序存在<strong>控制存储器</strong>里，不在主存——选择题经典陷阱。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li><strong>默写取指周期</strong>到形成肌肉记忆——所有题的公共开头；</li>
+<li>精做 2016 / 2019 / 2022—2026 共 7 道数据通路真题，逐题总结"指令 → 微操作"的翻译套路；</li>
+<li>自制一张空白单总线数据通路图，随机抽指令（LOAD / STORE / ADD / JMP / 间址指令）练习写全程；</li>
+<li>与流水线打通：同一条指令在五段流水里各做什么，与多周期的微操作对照理解。</li>
+</ol>
+</article>
+<div class="pagenav"><a href="co-03.html">← CO-03 Cache与存储层次</a><a href="ds-01.html">→ DS-01 栈与队列应用</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

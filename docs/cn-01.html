@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CN-01 时延计算 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x on" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #b8860b">
+<h1>CN-01 时延计算</h1>
+<blockquote>
+<p>凸包顶点 · 计算机网络 | 考频：5 次综合题（2010 / 2013 / 2016 / 2019 / 2022）| 难度：★★
+定位：网络凸包的"左下锚点"——五年一循环的计算题，套路固定，必须零失误。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>时延计算考频 5 次、难度仅 2 星，是网络凸包的最左边界。它把"物理层/链路层"的
+计算封进凸包：公式只有两三个，但<strong>单位换算和时序分析</strong>是粗心重灾区。</p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 四种时延</h3>
+<table>
+<thead>
+<tr>
+<th>时延</th>
+<th>公式</th>
+<th>发生在</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>发送（传输）时延</strong></td>
+<td>帧长 / 发送速率</td>
+<td>网卡把比特推上链路</td>
+</tr>
+<tr>
+<td><strong>传播时延</strong></td>
+<td>距离 / 电磁波速（2×10⁸ m/s）</td>
+<td>信号在介质中跑</td>
+</tr>
+<tr>
+<td>处理时延</td>
+<td>检错、查表</td>
+<td>路由器</td>
+</tr>
+<tr>
+<td>排队时延</td>
+<td>等输出链路空闲</td>
+<td>路由器队列</td>
+</tr>
+</tbody>
+</table>
+<p><strong>黄金辨析</strong>：发送时延看<strong>数据量和带宽</strong>，传播时延看<strong>距离</strong>——两者毫无关系。</p>
+<h3>2.2 三种交换方式对比（常结合时延一起考）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>电路交换</th>
+<th>报文交换</th>
+<th>分组交换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>建立连接</td>
+<td>需要（建立时延）</td>
+<td>不需要</td>
+<td>数据报不需要</td>
+</tr>
+<tr>
+<td>存储转发</td>
+<td>不</td>
+<td>整报文</td>
+<td>分组</td>
+</tr>
+<tr>
+<td>时延构成</td>
+<td>建立 + 传播</td>
+<td>逐跳存储转发</td>
+<td>逐跳存储转发 + 流水线效应</td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 分组交换的"流水线"计算（大题核心）</h3>
+<p>报文 L bit，分成 p 个分组（每个分组数据 + 首部 h），经 k 段链路（k−1 个中间节点），速率 R：</p>
+<pre><code>总时延 ≈ 最后一个分组走完全程的时间
+      = 源点发出全部 p 个分组的时间 + 最后一个分组再经 (k−1) 跳存储转发 + 各段传播时延
+      = p×(分组长/R) + (k−1)×(分组长/R) + k×传播时延
+</code></pre>
+<p><strong>口诀</strong>：源头发完所有分组，末尾分组还要再过 (k−1) 关。</p>
+<h3>2.4 配套小考点</h3>
+<ul>
+<li>带宽时延积 = 传播时延 × 带宽 = "链路上能装多少比特"；</li>
+<li>信道利用率 = 发送时间 / 总周期时间；</li>
+<li>奈氏准则（无噪声）：C = 2W·log₂V；香农（有噪声）：C = W·log₂(1+S/N)。</li>
+</ul>
+<hr />
+<h2>三、典型考法</h2>
+<ol>
+<li>给报文大小、分组大小、链路数、速率、距离 → 求总时延；</li>
+<li>比较电路/报文/分组交换在同一场景下的时延大小；</li>
+<li>求"分组多长时时延最小"或"第几个分组到达时…"之类的时序问题。</li>
+</ol>
+<p><strong>解题流程</strong>：画时序草图 → 列每个分组的旅程 → 找"最后到达者" → 分类加总。</p>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ 单位：1 KB = 1024 B = 8192 bit；速率 Mbps 是 10⁶ bit/s，<strong>别混 1024 和 1000</strong>。</li>
+<li>⚠️ 电磁波速 2×10⁸ m/s（真空中 3×10⁸），题目默认铜线/光纤用 2×10⁸。</li>
+<li>⚠️ 首部开销：分组越小分组数越多，首部总量越大——两头都要算。</li>
+<li>⚠️ 忽略处理/排队时延是<strong>题目明示</strong>的默认假设，别自己加戏。</li>
+<li>⚠️ 多跳时每跳都有一次"存储转发"，但发送时延只在源点发全部分组时占大头。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li>把 2010/2013/2016/2019/2022 五道时延题集中做一遍，总结共性；</li>
+<li>自制 3 组不同参数互换条件（改链路数/分组大小）重算，检验公式鲁棒性；</li>
+<li>与 TCP 吞吐量（CN-03）打通：时延带宽积是理解滑动窗口的钥匙。</li>
+</ol>
+</article>
+<div class="pagenav"><span></span><a href="cn-02.html">→ CN-02 IP子网划分与路由聚合</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

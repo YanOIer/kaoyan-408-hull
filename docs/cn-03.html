@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CN-03 TCP连接与拥塞控制 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x on" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #b8860b">
+<h1>CN-03 TCP 连接与拥塞控制</h1>
+<blockquote>
+<p>凸包顶点 · 计算机网络 | 考频：6 次综合题（2011 / 2014 / 2017 / 2020 / 2023 / 2026）| 难度：★★★
+定位：网络考频并列第一、网络侧难度最高的顶点——2026 年 9 分 TCP 综合题的主角。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>TCP 以 6 次考频、3 星难度占据网络凸包的<strong>上边界顶点</strong>。从三次握手的序号确认，
+到拥塞窗口的锯齿曲线，TCP 综合题是网络部分"最像大题的大题"。
+2026 年再次以 9 分综合题出现——<strong>TCP 不倒，网络不倒</strong>。</p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 三次握手（序号必考）</h3>
+<pre><code>客户                                服务器
+  |── SYN=1, seq=x ────────────────→|   第一次：客户发起
+  |←── SYN=1, ACK=1, seq=y, ack=x+1─|   第二次：服务器应答
+  |── ACK=1, seq=x+1, ack=y+1 ─────→|   第三次：确认连接
+</code></pre>
+<ul>
+<li><strong>为什么三次</strong>：防止"已失效的连接请求"突然到达造成错误连接 + 双方都要确认对方的初始序号。</li>
+<li>SYN 报文消耗一个序号。</li>
+</ul>
+<h3>2.2 四次挥手</h3>
+<pre><code>主动方        |── FIN=1, seq=u ──→|  被动方
+(FIN_WAIT)   |←── ACK, ack=u+1 ──|  （被动方还能继续发数据！半关闭）
+              |←── FIN, seq=w ────|
+(TIME_WAIT)   |── ACK, ack=w+1 ──→|  等待 2MSL 后关闭
+</code></pre>
+<ul>
+<li><strong>为什么 TIME_WAIT 等 2MSL</strong>：① 让最后一个 ACK 若丢失还能重传；② 让本连接的报文都从网络中消失。</li>
+<li>FIN 也消耗一个序号。</li>
+</ul>
+<h3>2.3 序号与确认号（计算题核心）</h3>
+<ul>
+<li>seq = 本报文段<strong>第一个数据字节</strong>的编号；</li>
+<li>ack = <strong>期望收到</strong>的下一个字节 = 已正确收到字节数 +1（累计确认）；</li>
+<li>捎带确认；超时重传；快重传 = <strong>收到 3 个冗余 ACK 立即重传</strong>，不等超时。</li>
+</ul>
+<h3>2.4 拥塞控制（画图题灵魂）</h3>
+<pre><code>拥塞窗口 cwnd
+  ↑
+  │        慢开始(指数)      拥塞避免(线性)
+  │      ╱⌒            ╱╱╱
+  │     ╱  超时→cwnd=1,╱    3次冗余ACK→快恢复
+  │    ╱   ssthresh减半      cwnd=ssthresh后线性
+  └──────────────────────────→ RTT
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>慢开始</td>
+<td>cwnd 从 1 个 MSS 起，<strong>每 RTT 翻倍</strong>（指数）</td>
+</tr>
+<tr>
+<td>拥塞避免</td>
+<td>cwnd ≥ ssthresh 后，<strong>每 RTT +1 MSS</strong>（线性）</td>
+</tr>
+<tr>
+<td>超时</td>
+<td>ssthresh = cwnd/2，<strong>cwnd = 1</strong>，重新慢开始</td>
+</tr>
+<tr>
+<td>快重传+快恢复</td>
+<td>3 个冗余 ACK：ssthresh = cwnd/2，<strong>cwnd = ssthresh</strong>（不减到 1），进拥塞避免</td>
+</tr>
+</tbody>
+</table>
+<p><strong>n 个 RTT 后 cwnd 多大 / 发送完 X 数据要几个 RTT</strong>——标准计算题，逐 RTT 列窗口表。</p>
+<h3>2.5 流量控制</h3>
+<ul>
+<li>接收窗口 rwnd 随 ACK 通告；发送窗口 = min(cwnd, rwnd)；</li>
+<li>零窗口 → 持续计时器 + 窗口探测报文。</li>
+</ul>
+<hr />
+<h2>三、典型考法（2026 型）</h2>
+<ol>
+<li><strong>报文段追踪</strong>：给抓包序列，求 seq/ack、判断属于握手/挥手/数据传输哪个阶段；</li>
+<li><strong>拥塞窗口表</strong>：逐 RTT 填写 cwnd、ssthresh，标注事件（超时/冗余 ACK）；</li>
+<li><strong>吞吐计算</strong>：结合窗口大小、RTT、时延带宽积求有效吞吐率或传完文件的耗时。</li>
+</ol>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ SYN 和 FIN 各占一个序号，纯 ACK 不占——算下一个 seq 时别多数。</li>
+<li>⚠️ 超时与冗余 ACK 的惩罚不同：一个回到 1，一个回到一半——<strong>最经典陷阱</strong>。</li>
+<li>⚠️ 慢开始是"指数"增长，名字叫"慢"是因为起点低。</li>
+<li>⚠️ 发送窗口 = min(cwnd, rwnd)，两个都要看。</li>
+<li>⚠️ 四次挥手中被动方 FIN 前的 ACK 之后仍可发数据（半关闭状态）。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li>默画握手/挥手时序图（含 seq/ack 标注）；</li>
+<li>做 5 组拥塞窗口逐 RTT 填表练习（混合超时与快恢复事件）；</li>
+<li>精做 2011/2014/2017/2020/2023/2026 六道真题，把"读抓包表"练成直觉。</li>
+</ol>
+</article>
+<div class="pagenav"><a href="cn-02.html">← CN-02 IP子网划分与路由聚合</a><a href="co-01.html">→ CO-01 指令系统设计</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

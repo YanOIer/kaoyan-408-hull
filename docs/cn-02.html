@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CN-02 IP子网划分与路由聚合 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x on" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #b8860b">
+<h1>CN-02 IP 子网划分与路由聚合</h1>
+<blockquote>
+<p>凸包顶点 · 计算机网络 | 考频：6 次综合题（2009 / 2012 / 2015 / 2018 / 2021 / 2024）| 难度：★★
+定位：网络考频并列第一的"右下顶点"——三年一循环，纯计算，网络 25 分的压舱石。</p>
+</blockquote>
+<hr />
+<h2>二、为什么它是凸包顶点</h2>
+<p>子网划分 6 次考频与 TCP 并列第一，难度全科目最低之一。它是凸包的<strong>右下角锚点</strong>：
+用最基础的二进制运算，换网络大题的稳定满分。<strong>任何一年都可能在综合题出现。</strong></p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 IP 地址与子网掩码</h3>
+<ul>
+<li>IPv4 地址 32 bit，点分十进制；</li>
+<li>网络号 = IP <strong>AND</strong> 掩码；</li>
+<li>特殊地址：全 0 主机号 = <strong>网络地址</strong>；全 1 主机号 = <strong>直接广播地址</strong>——都不可分配；</li>
+<li>可用主机数 = 2^(主机位数) − 2。</li>
+</ul>
+<h3>2.2 子网划分（VLSM）标准流程</h3>
+<pre><code>需求：把 X.0.0.0/16 分给 n 个部门，各部门需要 mᵢ 台主机
+
+1. 按主机需求从大到小排序
+2. 每个部门：主机位 hᵢ = ⌈log₂(mᵢ + 2)⌉，前缀 = 32 − hᵢ
+3. 从地址块起点顺序切分，保证边界对齐（块大小必须是 2 的幂）
+4. 写出每个子网：网络地址 / 掩码 / 广播地址 / 可用范围
+</code></pre>
+<p><strong>对齐原则</strong>：一个 2^k 大小的子网，其网络地址必须是 2^k 的倍数。</p>
+<h3>2.3 路由聚合（CIDR 超网）</h3>
+<ul>
+<li>找各网络地址的<strong>最长公共前缀</strong> → 聚合网络号；</li>
+<li>聚合条件：地址块连续、数量为 2 的幂、对齐；</li>
+<li><strong>最长前缀匹配</strong>：路由表多条命中时，选掩码最长者；</li>
+<li>默认路由 0.0.0.0/0 最后匹配。</li>
+</ul>
+<h3>2.4 配套考点</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NAT</td>
+<td>私有地址 ↔ 公有地址转换；私有段 10/8、172.16/12、192.168/16</td>
+</tr>
+<tr>
+<td>ARP</td>
+<td>IP → MAC，广播询问单播应答，<strong>只在同一局域网内</strong></td>
+</tr>
+<tr>
+<td>路由器 vs 交换机</td>
+<td>路由器隔离广播域；交换机不隔离</td>
+</tr>
+<tr>
+<td>分片</td>
+<td>MTU 限制，片偏移以 <strong>8 字节</strong>为单位</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>三、典型考法</h2>
+<ol>
+<li><strong>划分子网</strong>：给地址块 + 部门需求 → 输出分配方案（真题最常见的 9 分结构）；</li>
+<li><strong>聚合路由</strong>：给路由表若干条目 → 聚合 + 判断某目的 IP 走哪条；</li>
+<li><strong>辨析地址</strong>：给 IP/掩码 → 求网络号、广播号、可用主机数、是否同网段。</li>
+</ol>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ 可用主机数减 2：网络地址 + 广播地址不能分。</li>
+<li>⚠️ 子网边界必须 2 的幂对齐——"从前往后顺序排"前先按需求<strong>从大到小排序</strong>。</li>
+<li>⚠️ /31、/32 是特殊用途（点对点链路、主机路由），常规划分按 −2 处理。</li>
+<li>⚠️ 聚合时公共前缀位数要数二进制位，别看十进制像就合并。</li>
+<li>⚠️ 最长前缀匹配优先于一切——默认路由永远最后考虑。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li>准备一张 2 的幂次表（2⁰—2¹⁶）贴在手边，练到秒答主机位数；</li>
+<li>精做 2009/2012/2015/2018/2021/2024 六道真题，体会"同一道计算题的六次换装"；</li>
+<li>目标：网络大题 8—10 分钟拿满分，为其他科目让出时间。</li>
+</ol>
+</article>
+<div class="pagenav"><a href="cn-01.html">← CN-01 时延计算</a><a href="cn-03.html">→ CN-03 TCP连接与拥塞控制</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

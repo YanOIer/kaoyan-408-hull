@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>计算机网络真题整理（2009—2026） · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x on" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #8a857c">
+<h1>计算机网络真题整理（2009—2026）</h1>
+<blockquote>
+<p>按试卷年份排序，每道题号前标注【年份·考点】。共收录 <strong>162</strong> 道题，覆盖 2009—2026 共 18 年。</p>
+</blockquote>
+<h2>2009年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2009·传输层]</strong> 33. 在OSI参考模型中，自下而上第一个提供端到端服务的层次是：A.数据链路层 B.传输层 C.会话层 D.应用层　<strong>〔答案：B〕</strong></li>
+<li><strong>[2009·奈奎斯特定理]</strong> 34. 在无噪声情况下，若某通信链路的带宽为3kHz，采用4个相位，每个相位具有4种振幅的QAM调制技术，则该通信链路的最大数据传输速率是：A.12kbps B.24kbps C.48kbps D.96kbps　<strong>〔答案：B〕</strong></li>
+<li><strong>[2009·数据链路层]</strong> 35. 数据链路层采用后退N帧（GBN）协议，发送方已经发送了编号为0~7的帧。当计时器超时时，若发送方只收到0、2、3号帧的确认，则发送方需要重发的帧数是：A.2 B.3 C.4 D.5　<strong>〔答案：C〕</strong></li>
+<li><strong>[2009·数据链路层]</strong> 36. 以太网交换机进行转发决策时使用的PDU地址是：A.目的物理地址 B.目的IP地址 C.源物理地址 D.源IP地址　<strong>〔答案：A〕</strong></li>
+<li><strong>[2009·以太网]</strong> 37. 在一个采用CSMA/CD协议的网络中，传输介质是一根完整的电缆，传输速率为1Gbps，电缆中的信号传播速度为200000km/s。若最小数据帧长度减少800比特，则最远的两个站点之间的距离至少需要：A.增加160m B.增加80m C.减少160m D.减少80m　<strong>〔答案：D〕</strong></li>
+<li><strong>[2009·TCP]</strong> 38. 主机甲与主机乙之间已建立一个TCP连接，主机甲向主机乙发送了两个连续的TCP段，分别包含300字节和500字节的有效载荷，第一个段的序列号为200，主机乙正确接收到两个段后，发送给主机甲的确认序列号是：A.500 B.700 C.900 D.1000　<strong>〔答案：D〕</strong></li>
+<li><strong>[2009·TCP拥塞控制]</strong> 39. 一个TCP连接总是以1KB的最大段发送TCP段，发送方有足够多的数据要发送。当拥塞窗口为16KB时发生了超时，如果接下来的4个RTT（往返时间）时间内的TCP段的传输都是成功的，那么当第4个RTT时间内发送的所有TCP段都得到肯定应答时，拥塞窗口大小是：A.7KB B.8KB C.9KB D.16KB　<strong>〔答案：C〕</strong></li>
+<li><strong>[2009·FTP]</strong> 40. FTP客户和服务器间传递FTP命令时，使用的连接是：A.建立在TCP之上的控制连接 B.建立在TCP之上的数据连接 C.建立在UDP之上的控制连接 D.建立在UDP之上的数据连接　<strong>〔答案：A〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2009·CIDR/路由]</strong> 47. （9分）某网络拓扑图如下图所示，路由器R1通过接口E1、E2分别连接局域网1、局域网2，通过接口L0连接路由器R2，并通过路由器R2连接域名服务器与互联网。R1的L0接口的IP地址是202.118.2.1；R2的L0接口的IP地址是202.118.2.2，L1接口的IP地址是130.11.120.1，E0接口的IP地址是202.118.3.1；域名服务器的IP地址是202.118.3.2。R1和R2的路由表结构为：目的网络IP地址、子网掩码、下一跳IP地址、接口。1）将IP地址空间202.118.1.0/24划分为两个子网，分别分配给局域网1、局域网2，每个局域网需分配的IP地址数不少于120个。请给出子网划分结果，说明理由或给出必要的计算过程。2）请给出R1的路由表，使其明确包括到局域网1的路由、局域网2的路由、域名服务器的主机路由和互联网的路由。3）请采用路由聚合技术，给出R2到局域网1和局域网2的路由。　<strong>〔答案：1）子网1: 202.118.1.0/25，子网2: 202.118.1.128/25。2）R1路由表包含到局域网1、局域网2、域名服务器（202.118.3.2/32）、互联网（默认路由）的路由。3）R2路由聚合：202.118.1.0/24，下一跳202.118.2.1，接口L0。〕</strong></li>
+</ul>
+<h2>2010年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2010·网络体系结构的定义]</strong> 33. 计算机网络体系结构的定义包括哪些内容？各层功能划分、协议集合、层次间接口等。体系结构是否包括具体实现细节？　<strong>〔答案：C〕</strong></li>
+<li><strong>[2010·分组交换网文件传输时间]</strong> 34. 主机H1经分组交换机向H2发送980KB文件，链路速率100Mbps，分组1000B（头部20B），最短路径经过2台交换机，求最少传输时间（ms）。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2010·RIP路由协议距离向量更新]</strong> 35. R1收到R2的路由更新报文后，R1到net1的距离从15变为17（16表示不可达），判断R1能否经R2到达net1及相关选项正误。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2010·ICMP差错报告报文类型]</strong> 36. ICMP差错报告报文包括哪些类型？终点不可达、源抑制（拥塞丢弃时通知源点减速）、超时、参数问题、重定向等5种。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2010·子网掩码与子网/主机数计算]</strong> 37. 网络192.168.5.0/24使用子网掩码255.255.255.248，可划分子网数量和每个子网可用的主机地址数分别是多少？　<strong>〔答案：A〕</strong></li>
+<li><strong>[2010·冲突域与广播域隔离]</strong> 38. 各种网络设备（中继器/集线器、网桥/交换机、路由器）分别工作在哪一层？各自能隔离冲突域还是广播域？设备端口数与域的关系。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2010·TCP滑动窗口与发送量计算]</strong> 39. 甲乙主机TCP通信，接收窗口4000B，拥塞窗口2000B，已发送确认1000B。甲还可向乙发送的最大字节数为多少？发送窗口=min{接收窗口,拥塞窗口}。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2010·DNS域名解析查询方式]</strong> 40. 采用递归查询方式时，本地域名服务器不知道答案时会以DNS客户身份继续向上查询而非让主机自行查询。主机和本地服务器各发请求条数？　<strong>〔答案：A〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2010·以太网有效数据传输率计算]</strong> 47. 【以太网性能】甲乙主机通过1km链路连接，传播速率200000km/s，数据率10Mbps，最短帧64B，最大帧1518B。(1)两主机均检测到冲突的最短时间和最长时间；(2)甲的有效数据传输率（考虑发送时延+确认帧+往返传播时延）。　<strong>〔答案：最短0.01ms，最长0.02ms，有效数据传输率约9.33Mbps〕</strong></li>
+</ul>
+<h2>2011年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2011·IP数据报服务]</strong> 33. TCP/IP的网络层提供的服务特点是：A.面向连接可靠 B.无连接尽最大努力 C.面向连接不可靠 D.无连接可靠　<strong>〔答案：B〕</strong></li>
+<li><strong>[2011·波特率计算]</strong> 34. 采用4种相位调制，数据传输率为2400bps，则波特率为：A.600波特 B.1200波特 C.2400波特 D.4800波特　<strong>〔答案：B〕</strong></li>
+<li><strong>[2011·选择重传协议]</strong> 35. 选择重传协议中，接收方收到1号帧的确认ACK，0、2号帧超时，3号帧计时器未超时。发送方处理方法是：A.重传0、2号帧 B.重传0、1、2号帧 C.重传0、2、3号帧 D.重传0号帧　<strong>〔答案：A〕</strong></li>
+<li><strong>[2011·介质访问控制（CSMA/CA）]</strong> 36. 下列介质访问控制协议中，接收方需要发送ACK确认的是：A.CDMA B.CSMA/CD C.CSMA D.CSMA/CA　<strong>〔答案：D〕</strong></li>
+<li><strong>[2011·路由聚合]</strong> 37. R1需将分组路由到子网192.168.2.0/25和192.168.2.128/25，R1到R2的下一跳接口IP为192.168.1.2，则R1中应添加的路由条目是：A.192.168.2.0/24 192.168.1.2 B.192.168.2.0/25 192.168.1.2 C.192.168.2.128/25 192.168.1.2 D.192.168.2.0/26 192.168.1.2　<strong>〔答案：A〕</strong></li>
+<li><strong>[2011·子网划分与主机数]</strong> 38. 子网192.168.4.0/30可分配给主机的IP地址数是：A.2 B.4 C.14 D.30　<strong>〔答案：A〕</strong></li>
+<li><strong>[2011·TCP连接建立]</strong> 39. 主机甲向乙发起TCP连接，甲的初始序号seq=11220，则乙回复的确认报文段中：A.ACK=1,SYN=1,ack=11220,seq=11221 B.ACK=1,SYN=1,ack=11221,seq=11221 C.ACK=0,SYN=1,ack=11220,seq=11221 D.ACK=1,SYN=1,ack=11221,seq=y（y由乙任意给出）　<strong>〔答案：D〕</strong></li>
+<li><strong>[2011·TCP序号与确认号]</strong> 40. 主机甲向乙发送3个TCP段共900字节，第3段序号为900，则乙期望收到的第2段序号为900-400=500，故乙发给甲的确认号为：A.500 B.899 C.900 D.1300　<strong>〔答案：A〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2011·IP数据报、ARP、HTTP、NAT综合]</strong> 47. （1）根据所给以太网帧（图中含IP、TCP、HTTP首部及数据），求目的IP地址和默认网关的MAC地址；（2）若主机用ARP解析MAC，ARP请求帧的目的MAC地址是什么；（3）HTTP/1.1持续非流水线方式下，访问1个页面含5个对象共需多少RTT；（4）经NAT路由器后IP分组哪些字段会变化　<strong>〔答案：（1）目的IP=64.170.98.32(40.aa.62.20)，网关MAC=00-21-27-21-51-ee；（2）广播地址FF-FF-FF-FF-FF-FF；（3）共需6个RTT；（4）源IP由10.2.128.100变为101.12.123.15，TTL减1，校验和重算〕</strong></li>
+</ul>
+<h2>2012年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2012·网络层协议关系（ICMP/IP/TCP/UDP/PPP）]</strong> 33. 以下协议对中，前者利用后者提供服务的是：A. ICMP利用TCP B. UDP利用IP C. PPP利用TCP D. ICMP利用IP　<strong>〔答案：B〕</strong></li>
+<li><strong>[2012·物理层接口特性（过程特性）]</strong> 34. 物理层接口特性中的过程特性定义的是：A. 信号电平 B. 接口形状尺寸 C. 各条物理线路的工作过程和时序 D. 比特流的编码方式　<strong>〔答案：C〕</strong></li>
+<li><strong>[2012·以太网服务特点（不可靠交付）]</strong> 35. 以太网提供的服务特点是：A. 面向连接可靠传输 B. 无连接不可靠传输（尽最大努力交付）C. 面向连接不可靠传输 D. 无连接可靠传输　<strong>〔答案：A〕</strong></li>
+<li><strong>[2012·数据链路层滑动窗口协议帧编号位数计算]</strong> 36. 数据帧长度128字节，信道速率16kbps，单向传播延迟270ms，采用停等协议。帧序号至少需要多少位？A. 3位 B. 4位 C. 5位 D. 6位　<strong>〔答案：B〕</strong></li>
+<li><strong>[2012·路由器的功能（ICMP源抑制、分组检验等）]</strong> 37. 路由器的功能包括：I.转发IP分组 II.拥塞时发ICMP源抑制报文 III.保证IP分组不丢失 IV.首部差错检验并丢弃出错报文。全部正确的选项是：A. 仅I和IV B. 仅I、II和IV C. 仅I、II、III和IV D. 仅I和II　<strong>〔答案：C〕</strong></li>
+<li><strong>[2012·ARP协议功能（IP地址解析为MAC地址）]</strong> 38. ARP协议的功能是将：A. IP地址转换为域名 B. MAC地址转换为IP地址 C. IP地址转换为MAC地址 D. 域名转换为IP地址　<strong>〔答案：A〕</strong></li>
+<li><strong>[2012·子网划分与广播地址计算]</strong> 39. 主机IP地址180.80.77.55，子网掩码255.255.252.0（前22位子网号），该主机所在子网的广播地址为：A. 180.80.76.255 B. 180.80.77.255 C. 180.80.79.255 D. 180.80.78.255　<strong>〔答案：D〕</strong></li>
+<li><strong>[2012·SMTP与POP3通信方式对比]</strong> 40. SMTP采用的通信方式为：A. 推（Push） B. 拉（Pull） C. 推拉结合 D. 以上都不是　<strong>〔答案：D〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2012·TCP连接建立与数据传输分析（抓包分析）]</strong> 47. 根据捕获的IP/TCP分组表（含源IP、目的IP、TCP标志位SYN/ACK/seq/ack等字段），分析：(1)哪些分组由H发送，哪些完成了三次握手，哪些需要填充 (2)S已收到的应用层数据字节数 (3)S到H的TCP连接释放过程涉及的分组。　<strong>〔答案：(1)1/3/4号分组由H发送；1/2/3号完成三次握手；3/5号需填充 (2)S已收到16字节数据 (3)连接释放涉及FIN/ACK分组交换〕</strong></li>
+</ul>
+<h2>2013年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2013·OSI参考模型(表示层)]</strong> 33. 在OSI参考模型中，应用层的相邻层是表示层（第六层）。表示层功能包括数据字符集转换、数据格式化、文本压缩、加密解密等　<strong>〔答案：A (表示层)〕</strong></li>
+<li><strong>[2013·物理层(编码/调制)]</strong> 34. 10Base-T即10Mbps以太网，采用曼彻斯特编码。一个码元分两个间隔，前低后高表示1，前高后低表示0（也可相反规定）。对应比特串可以是（）　<strong>〔答案：B (00110110或11001001)〕</strong></li>
+<li><strong>[2013·交换技术(分组交换vs报文交换)]</strong> 35. 不分组时发送8Mb报文时延800ms，报文交换总时延1600ms；分组后每个分组1ms，共800个分组，主机甲发完800ms，路由器收到第一个分组后直接转发，总时延为（）　<strong>〔答案：C (801ms)〕</strong></li>
+<li><strong>[2013·数据链路层(介质访问控制)]</strong> 36. 选项A(CDMA)、C(FDMA)、D(TDMA)都是信道划分协议（静态划分信道，不会发生冲突）；CSMA是载波侦听多路访问协议，发送过程中可能会发生冲突的是（）　<strong>〔答案：C (CSMA)〕</strong></li>
+<li><strong>[2013·数据链路层(组帧/HDLC)]</strong> 37. HDLC协议组帧时以01111110标识帧的开始和结束，帧中出现5个连续"1"时填充一个"0"。组帧后的比特串为（）　<strong>〔答案：D〕</strong></li>
+<li><strong>[2013·数据链路层/网络层(以太网交换机)]</strong> 38. 直通交换方式只检查帧的目的地址(6B)，最短的传输延迟=6×8bit/100Mbps=（）　<strong>〔答案：A (0.48μs)〕</strong></li>
+<li><strong>[2013·传输层(TCP)]</strong> 39. 确认序号ack期望收到对方下一个报文段的第一个字节序号。甲收到乙的TCP段(seq=1913, ack=2046, 有效载荷100字节)，甲发给乙的TCP段的seq=2046，ack=2013的是（）　<strong>〔答案：B〕</strong></li>
+<li><strong>[2013·应用层(SMTP/Email)]</strong> 40. SMTP协议用于用户代理向邮件服务器发送邮件或在邮件服务器之间发送邮件，SMTP只支持传输7比特ASCII码内容。关于电子邮件应用的说法正确的是（）　<strong>〔答案：B〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2013·路由聚合与BGP协议]</strong> 47. 【考点】子网路由聚合、最长前缀匹配、BGP边界网关协议。
+【内容】
+(1) R2路由表构建：AS1中153.14.5.0/25和153.14.5.128/25聚合为153.14.5.0/24(下一跳153.14.3.2,接口S0)；AS2中194.17.20.0/25和194.17.21.0/24聚合为194.17.20.0/23(下一跳194.17.24.2,接口S1)；194.17.20.128/25直连接口E0。
+(2) 目的IP 194.17.20.200同时匹配194.17.20.0/23和194.17.20.128/25，按最长匹配原则选择E0接口转发。
+(3) R1和R2属不同自治系统，使用BGP/BGP4(应用层协议，基于TCP)交换路由信息。　<strong>〔答案：参考答案：(1)3条路由项：153.14.5.0/24→S0, 194.17.20.0/23→S1, 194.17.20.128/25→E0；(2)经E0转发；(3)BGP/BGP4，基于TCP〕</strong></li>
+</ul>
+<h2>2014年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2014·OSI参考模型层次关系]</strong> 33. 在OSI参考模型中，直接为会话层提供服务的是哪一层？　<strong>〔答案：C〕</strong></li>
+<li><strong>[2014·交换机转发与MAC地址学习]</strong> 34. 交换机收到目的地址未知的帧时的转发行为及转发表更新情况。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2014·香农定理与信道传输速率]</strong> 35. 以下哪项不影响信道的数据传输速率？信噪比/带宽/调制速率/信号传播速度　<strong>〔答案：D〕</strong></li>
+<li><strong>[2014·后退N帧协议（GBN）]</strong> 36. 主机甲乙间信道带宽100Mbps，往返时延100ms，发送窗口1000帧每帧1000B，甲最大传输速率？　<strong>〔答案：C〕</strong></li>
+<li><strong>[2014·CDMA码片序列（内积运算）]</strong> 37. CDMA系统中，接收到的序列与A站码片序列(1,1,1,1)做内积，求A发送的数据。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2014·TCP拥塞控制]</strong> 38. t时刻超时后ssthresh设为4拥塞窗口设为1KB，经历10个RTT后发送窗口大小？（接收窗口10KB）　<strong>〔答案：A〕</strong></li>
+<li><strong>[2014·UDP协议特性]</strong> 39. 关于UDP协议特性的描述：无连接/复用分用/可靠传输/差错校验重传，哪些正确？　<strong>〔答案：B〕</strong></li>
+<li><strong>[2014·网络应用层协议综合]</strong> 40. 访问Web网站时不可能用到以下哪种协议？PPP/ARP/DNS/SMTP　<strong>〔答案：D〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2014·路由表构建与路由聚合]</strong> 43. 【路由器R1路由表】(1)要求路由项尽可能少，利用聚合构造R1的路由表（目的网络/下一跳/接口）；(2)R1通过哪个接口转发目标IP分组？收到的TTL值？(3)若R1新增默认路由，LSI如何增加？　<strong>〔答案：(1)路由表：192.1.1.0/24→E0直连；192.1.6.0/23（聚合6.0和7.0）→10.1.1.2/L0；192.1.5.0/24→10.1.1.10/L1；(2)L0接口转发，TTL=61（64-3跳）；(3)增加Prefix=0.0.0.0/0 Metric=10的特殊直连网络。〕</strong></li>
+</ul>
+<h2>2015年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2015·POP3协议]</strong> 33. POP3邮局协议建立在TCP连接之上，使用有连接可靠的数据传输服务用于接收电子邮件。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2015·数字编码技术(NRZ/NRZI/曼彻斯特编码)]</strong> 34. NRZ用高低电平分别表示1和0；NRZI用电平翻转表示1、相同电平表示0；曼彻斯特编码将码元分成两个相等间隔，低→高表示1、高→低表示0。识别给定波形对应的编码类型。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2015·滑动窗口协议与链路利用率]</strong> 35. 数据帧1000B，信道128kbps，单程传播时延250ms，要求链路利用率≥80%。帧发送时延62.5ms，求最少需要的帧序号比特位数K（2^K ≥ n+1），n≥7.2故K至少为4。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2015·CSMA/CD与CSMA/CA协议对比]</strong> 36. CSMA/CD适用于有线以太网（碰撞检测），CSMA/CA适用于无线局域网（碰撞避免），二者应用场景不同不能互换。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2015·以太网交换机工作原理]</strong> 37. 交换机本质是多端口网桥(A正确)，工作在数据链路层(D错误-不能互联不同网络层协议网络)，可划分小的冲突域(B错误)，不能分割广播域(C错误-广播域属网络层概念)。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2015·IP路由——最长前缀匹配]</strong> 38. 目的IP地址169.96.40.5根据最长前缀匹配原则选择路由：169.96.40.0/27前27位匹配最长(优先于默认路由)，选择对应下一跳接口。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2015·TCP流量控制与拥塞控制]</strong> 39. 发送窗口上限=min[接收窗口rwnd，拥塞窗口cwnd]。接收方缓存16KB但数据未被取走导致接收窗口缩小，使得发送方的发送窗口最终变为1KB。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2015·HTTP协议头部字段]</strong> 40. HTTP报文头部：Connection:Close表示非持续连接，keep-alive表示持续连接；Cookie由服务器产生并通过Set-Cookie设置，请求报文中携带Cookie头表示曾访问过该服务器。　<strong>〔答案：A〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2015·DHCP、子网划分与以太网帧分析]</strong> 47. 局域网拓扑：主机1(WWW服务器)网关配置错误(111.123.15.2应为111.123.15.1)，主机2-N由DHCP动态分配IP：(1)DHCP最大分配范围？Discover报文源/目的IP？(2)第一个以太网帧目的MAC？发往Internet帧的目的MAC？(3)主机1为何能访问WWW但不能访问Internet？　<strong>〔答案：DHCP范围111.123.15.5~254；广播MAC ff:ff:ff:ff:ff:ff；主机1网关配错致无法上网〕</strong></li>
+</ul>
+<h2>2016年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2016·OSI参考模型与网络设备层次]</strong> 33. OSI七层模型：集线器Hub工作在物理层(层1)、交换机Switch工作在数据链路层(层2)、路由器Router工作在网络层(层3)。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2016·香农定理与信道数据传输速率]</strong> 34. 香农定理 C=W·log₂(1+S/N)，带宽8kHz，信噪比30dB(S/N=1000)，利用率为50%，求实际数据传输速率约40kbps。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2016·冲突域隔离（交换机vs集线器）]</strong> 35. 交换机能隔离冲突域而集线器不能。H2发帧经交换机转发，确认帧仅H2/H3能在物理层收到。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2016·以太网最短帧长与碰撞检测距离计算]</strong> 36. 100Base-T Hub产生1.535µs延时，最短帧长64B，速率100Mbps，求两主机理论上最远距离约205m。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2016·RIP路由协议（坏消息传得慢）]</strong> 37. R3检测到201.1.2.0/25不可达设距离16，R2从R3收到此信息但R1可达该网络(距离2)，求R2到该网络的距离。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2016·子网划分与IP地址合法性判断]</strong> 38. /30子网掩码255.255.255.252，接口IP 201.1.3.9，求同一子网可用源IP地址（排除全0全1主机号）。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2016·子网划分、默认网关配置与连通性诊断]</strong> 39. H1-H4在不同子网，R2的E1口IP为192.168.3.254，H2默认网关192.168.3.1，分析H1能否与H3通信、H2/H4能否上网等问题。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2016·DNS查询过程与查询次数]</strong> 40. 采用迭代查询方式解析域名abc.xyz.com，最少发出0次查询（本地缓存命中），最多发出4次查询（本地→根→顶级→权限服务器）。　<strong>〔答案：B〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2016·TCP连接管理、拥塞控制与传输速率计算]</strong> 41. (1)TCP三次握手第二次握手报文段的SYN/ACK标志及确认序号；(2)接收窗口20KB、MSS=1KB，第8个确认到达时的拥塞窗口和发送窗口；(3)发送窗口归零时的下一序号和平均传输速率；(4)连接释放的最短时间（MSL因素）。　<strong>〔答案：SYN=1, ACK=1, ack=101; 拥塞窗口9KB, 发送窗口9KB; 序号20581, 速率20kbps; 300ms〕</strong></li>
+</ul>
+<h2>2017年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2017·OSI参考模型的数据传输效率]</strong> 33. OSI七层模型除去物理层和应用层剩五层，每层PDU引入20B头部共100B开销。应用层数据400B，求应用层数据传输效率400B/500B=80%。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2017·奈奎斯特定理与香农定理（信道极限速率）]</strong> 34. 无噪信道用奈奎斯特定理C=2Wlog₂N；有噪信道用香农定理C=Wlog₂(1+S/N)，S/N由分贝值换算。代入参数求极限数据传输速率。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2017·IEEE 802.11无线局域网帧地址字段]</strong> 35. 802.11帧To AP类型：地址1=RA(BSSID即AP的MAC)，地址2=SA(源站H的MAC)，地址3=DA(目的站R的MAC)。笔记本电脑发往AP的数据帧地址含义。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2017·特殊IP地址的分类与用途]</strong> 36. 0.0.0.0/32作为本网络本主机源地址；127.0.0.1回送地址(立即返回本机)；200.10.10.3为C类地址；255.255.255.255为受限广播地址。判断IP地址类别和用途。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2017·路由协议封装方式（RIP/OSPF/BGP）]</strong> 37. RIP基于UDP广播交换路由信息；OSPF内部网关协议直接用IP封装数据；BGP外部网关协议用TCP封装数据。三种协议的传输层封装方式对比。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2017·子网划分与可分配IP地址数计算]</strong> 38. 16位主机号平均分成128个相同规模子网，每子网7位子网号+9位主机号。排除全0全1，可分配最大IP数=2⁹-2=510个。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2017·TCP慢开始(Slow Start)拥塞控制]</strong> 39. 慢开始算法：发送窗口=min{cwnd, rwnd}，初始cwnd=1KB(MSS)，每RTT翻倍。从初始到cwnd达到32KB至少需5个RTT（假设接收缓存足够大）。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2017·FTP协议的连接模式与端口]</strong> 40. FTP使用控制连接(全程保持)和数据连接(每次传输建立关闭)(A/B正确)；默认主动模式用TCP20数据/TCP21控制(C错——被动模式端口协商)(D正确)。找错误叙述。　<strong>〔答案：C〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2017·GBN后退N帧协议的窗口、重传与信道利用率]</strong> 47. (1)t0-t1期间甲方确认乙方已接收3帧(S0,0/S1,0/S2,0)，R3,3确认号3；(2)从t1起还可发5帧(首S3,2末S7,2)，发送窗口≤7(3位序号8&gt;W+1)；(3)超时重发3帧(首S2,3)；(4)GBN最大信道利用率U=N·Td/(Td+RTT+Ta)=50%。　<strong>〔答案：确认收到3帧(0~2号); 还可发5帧(3~7号); 重发3帧(2~4号); 最大利用率50%〕</strong></li>
+</ul>
+<h2>2018年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2018·传输层协议选择(TCP/UDP)]</strong> 33. 常见应用层协议使用的传输层协议。FTP/SMTP/HTTP使用TCP保证可靠性；DNS使用UDP效率更高开销更小。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2018·物理层接口特性]</strong> 34. 物理层接口规范的四种特性。机械特性(接口形状)、电气特性(信号电平)、功能特性(引脚功能)、规程特性(协议)。MAC地址属于数据链路层。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2018·CSMA/CA信道预约机制]</strong> 35. 无线局域网CSMA/CA协议进行信道预约使用的帧类型。RTS(请求发送)和CTS(允许发送)帧用于信道预约避免碰撞。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2018·信道利用率/停等协议]</strong> 36. 数据传输速率3kbps，单程传播时延200ms，忽略确认帧传输延时。利用信道利用率公式U=帧发送时间/(帧发送时间+往返传播时延)，求最优帧长。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2018·MAC地址与IP地址变化]</strong> 37. 主机H1经路由器R向主机H2发送分组P，经过R转发后源MAC地址和目的MAC地址分别变为路由器出口端口MAC和目的主机H2的MAC。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2018·CIDR路由聚合]</strong> 38. 将4个路由前缀聚合为一个。前16位相同，第3段展开二进制后找最长公共前缀（3位），得到聚合后的网络地址35.230.32.0/19。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2018·传输层复用与分用/端口号]</strong> 39. 传输层分用的定义：接收方剥去报文首部后把数据正确交付给目的进程。端口号是TSAP用于标识应用进程。目的端口号用于终点交付报文。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2018·SMTP邮件传输格式限制]</strong> 40. SMTP协议限制邮件体只能使用7位ASCII码表示。传输非文本文件（图片/视频等）需重新编码为ASCII。ASCII文本无须转换即可直接传输。　<strong>〔答案：D〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2018·子网划分与IP分片]</strong> 47. <a href="1">网络综合</a>192.168.1.0/24划分子网给销售部和技术部(/25)，求技术部广播地址192.168.1.127及还可分配主机45台；(2)1500B IP分组经MTU=800B子网转发，求最少分片数为2，第1片偏移0，第2片偏移97。　<strong>〔答案：见解析：(1)技术部广播地址192.168.1.127，还可分配45台主机；(2)最少2个分片，第1片偏移0，第2片偏移97(单位8B)。〕</strong></li>
+</ul>
+<h2>2019年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2019·OSI参考模型/分层结构]</strong> 33. OSI参考模型中，负责为分组交换网上的不同主机提供通信服务的层次是：A.数据链路层；B.网络层；C.传输层；D.会话层。网络层实现端到端（主机到主机）的路由选择。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2019·奈奎斯特定理/香农定理]</strong> 34. 信道带宽为3kHz，采用16种不同的物理状态表示数据。根据奈奎斯特定理，该信道的极限数据传输率为：A.6kbps；B.12kbps；C.24kbps；D.48kbps。公式C=2Wlog₂V。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2019·以太网帧结构/CSMA/CD]</strong> 35. 以太网采用CSMA/CD协议，最小帧长=2τ×数据传输率。若数据传输率提高到原来的10倍，为保持最小帧长不变，网络最大段长应变为原来的：A.1/10；B.不变；C.10倍；D.100倍。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2019·ARP协议/地址解析]</strong> 36. 主机A向主机B发送IP分组，已知目的IP但不知道MAC地址。关于ARP的工作过程：I.ARP请求广播发送；II.ARP响应单播返回；III.ARP表中每项都有生存时间；IV.ARP属于应用层协议。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2019·子网划分/子网掩码]</strong> 37. 某单位分配到一个B类IP地址130.50.0.0/16，现需划分为若干子网，其中最大子网需容纳1000台主机。子网掩码应设置为：A.255.255.240.0(/20)；B.255.255.248.0(/21)；C.255.255.252.0(/22)；D.255.255.254.0(/23)。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2019·TCP拥塞控制/慢开始]</strong> 38. TCP连接建立后的慢开始阶段，拥塞窗口cwnd初始为1MSS，阈值ssthresh=16MSS。当cwnd增长到24MSS时发生超时，则新的ssthresh和cwnd应分别设置为：A.8,1；B.12,1；C.16,1；D.24,1。超时后减半重置。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2019·DNS域名解析/迭代查询]</strong> 39. 关于DNS域名解析过程的描述：I.本地域名服务器先查询缓存；II.缓存未命中时向根域名服务器发起迭代查询；III.递归查询中各级服务器依次向上查询；IV.域名到IP的映射可能一对多。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2019·HTTP协议/方法与状态码]</strong> 40. HTTP/1.1协议中，关于持久连接(Persistent Connection)和非持久连接的区别：I.持久连接可复用TCP连接传多个对象；II.管道化(Pipelining)可在收到响应前发多个请求；III.非持久连接每个对象需新建TCP连接。　<strong>〔答案：A〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2019·子网划分与IP分组转发]</strong> 47. <a href="1">网络综合</a>某单位申请到IP地址块221.228.88.0/24，需划分给4个子网，其中子网1容纳60台主机，子网2容纳120台主机，子网3容纳30台主机，子网4容纳10台主机。请设计子网划分方案，写出各子网的地址范围和子网掩码；(2)主机A(IP=221.228.88.100/26)向主机B(IP=221.228.88.200/27)发送一个总长为1500B的IP分组，经过MTU=800B的网络转发，求分片情况。　<strong>〔答案：见解析：(1)/26(62主机),/25(126主机),/27(30主机),/28(14主机)；(2)MTU=800B时IP载荷≤760B，1500B数据分2片：片1偏移0(776B数据)，片2偏移97(724B数据)。〕</strong></li>
+</ul>
+<h2>2020年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2020·网络协议三要素（语法/语义/时序）]</strong> 33. 协议由语法、语义和时序三部分组成。发送方与接收方依次交换信息体现了协议三要素中的时序(同步)要素。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2020·虚电路服务特点]</strong> 34. 虚电路服务需建立连接，使用短虚电路号，同路由转发，分组有序到达保证传输，不需预分配带宽。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2020·网络设备隔离广播域/冲突域]</strong> 35. 路由器隔离广播域和冲突域；交换机仅隔离冲突域；集线器两者都不隔离。题中共有2个广播域、4个冲突域。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2020·数据链路层信道利用率计算]</strong> 36. 帧1000字节，10kbps带宽，传播时延200ms，发送时间800ms，周期2000ms，信道利用率=800/2000=40%。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2020·IEEE 802.11无线局域网/帧间间隔IFS]</strong> 37. 802.11三种帧间间隔：DIFS最长优先级最低用于异步帧竞争；PIFS中等用于PCF；SIFS最短最高用于立即响应。图中IFS1为DIFS，IFS2-4为SIFS。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2020·TCP拥塞窗口增长/慢开始/拥塞避免]</strong> 38. 拥塞窗口从8KB增长到32KB的最长时间，假设慢开始门限≤8KB，加法增大每RTT加1，所需时间=(32-8)×2ms=48ms。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2020·TCP连接/序号/FIN段]</strong> 39. SYN段序号1000，数据起始序号1001；FIN段序号5001，已发送应用层数据=5001-1001=4000字节。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2020·DNS查询时延/TCP连接建立]</strong> 40. DNS最短时延0(RTT忽略)+TCP建连1RTT+资源访问1RTT=20ms；最长时延迭代查询3RTT+2RTT=50ms(每RTT=10ms)。　<strong>〔答案：D〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2020·NAT配置/IP地址转换/DNS/Web服务]</strong> 47. (1)配置R2的NAT表：外网203.10.2.2:80↔内网192.168.1.2:80(Web服务器)。(2)H2发往Web的数据报经NAT转换：源IP从192.168.1.2变为203.10.2.6(R3外网IP)，目的IP从203.10.2.2变为192.168.1.2。　<strong>〔答案：NAT:203.10.2.2:80→192.168.1.2:80; H2报文源IP经R3/R2两次NAT转换〕</strong></li>
+</ul>
+<h2>2021年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2021·网络协议三要素(语法/语义/时序/同步)]</strong> 33. 网络协议的三要素为语法、语义和时序(同步)。发送方与接收方依次交互信息体现了协议中的时序(同步)要素。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2021·虚电路服务特点(连接/虚电路号/有序到达)]</strong> 34. 关于虚电路服务的特点：需先建立连接，使用短的虚电路号，沿同一路由转发分组，保证分组有序到达传输层。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2021·网络设备隔离广播域与冲突域(路由器/交换机/集线器)]</strong> 35. 路由器隔离广播域和冲突域；交换机仅隔离冲突域；集线器既不隔离广播域也不隔离冲突域。给定拓扑图中广播域和冲突域的数量统计。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2021·数据链路层/信道利用率计算(停等协议)]</strong> 36. 帧长度1000字节，数据率10kbps，单向传播时延200ms，发送时延800ms，信道利用率=发送时延/(发送时延+2×传播时延)。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2021·IEEE 802.11无线局域网/帧间间隔IFS(DIFS/PIFS/SIFS)]</strong> 37. 802.11三种帧间间隔：DIFS最长优先级最低用于CSMA/CA竞争；PIFS中等用于PCF无竞争；SIFS最短优先级最高用于ACK等立即响应。图中标注的IFS类型判断。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2021·TCP拥塞窗口增长/慢开始门限/拥塞避免]</strong> 38. TCP拥塞窗口从8KB增长到32KB所需的最长时间。假设慢开始门限ssthresh≤8KB，拥塞避免阶段每RTT加1MSS(RTT=2ms)，计算总时间。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2021·TCP连接管理/序号计算/SYN/FIN段]</strong> 39. TCP连接建立时SYN段seq=1000(占1序号)，数据起始序号1001；关闭时FIN段seq=5001，已发送的应用层数据字节数=5001-1001=4000字节。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2021·DNS查询/TCP连接建立/网页访问总时延]</strong> 40. DNS查询最短0ms(本地缓存命中)+TCP建连1RTT+HTTP请求响应1RTT=2RTT=20ms；最长迭代DNS 3RTT+TCP+HTTP共约50ms(RTT=10ms)。　<strong>〔答案：D〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2021·NAT配置/IP地址转换/DNS/Web服务器访问]</strong> 47. (1)配置R2路由器的NAT静态映射表：外网IP:端口203.10.2.2:80↔内网Web服务器192.168.1.2:80。(2)主机H2发往Web的数据报经R3和R2两次NAT转换：源IP从192.168.1.2变为203.10.2.6再变为203.10.2.2，目的IP相应变化。　<strong>〔答案：NAT静态映射203.10.2.2:80→192.168.1.2:80; H2报文经R3/R2两次NAT源IP目的IP均被转换〕</strong></li>
+</ul>
+<h2>2022年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2022·OSI模型流量控制层次]</strong> 33. 在OSI参考模型中，具有流量控制功能的层次包括(仅数据链路层 / 仅网络层 / 数据链路层和网络层 / 数据链路层、网络层和传输层)。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2022·奈奎斯特定理/最大数据传输速率]</strong> 34. 信道带宽400kHz，采用4个幅值的ASK调制，根据奈奎斯特定理，最大数据传输速率为(400kbps / 800kbps / 1.6Mbps / 3.2Mbps)。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2022·子网划分/网络地址计算]</strong> 35. 主机IP地址183.80.130.54，子网掩码255.255.192.0，该主机所在网络的网络地址是(183.80.0.0 / 183.80.64.0 / 183.80.128.0 / 183.80.192.0)。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2022·子网划分/默认网关确定]</strong> 36. 主机IP192.168.162.177/27，默认网关地址为(192.168.162.1 / 192.168.162.161 / 192.168.162.162 / 192.168.162.176)。网关通常为子网第一个可用地址或指定值。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2022·SDN软件定义网络/北向接口与南向接口]</strong> 37. SDN控制器向数据平面的SDN交换机下发流表时使用的接口是(REST API北向接口 / OpenFlow南向接口 / NETCONF南向接口 / 其他南向协议)。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2022·TCP拥塞控制/慢开始与拥塞避免]</strong> 38. TCP连接中cwnd初始值为16，时刻0发生超时，ssthresh置为8，cwnd置为1。经过多少个RTT后cwnd重新增长到16(8/10/11/13)。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2022·TCP连接释放/四次挥手最少时间]</strong> 39. TCP连接中RTT=50ms，MSL=800ms。客户端主动关闭，服务器收到FIN后立即回FIN（合并第2、3步）。客户端进入CLOSED至少需(1650ms / 850ms / 其他)；服务器进入CLOSED需75ms。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2022·HTTP持久连接/流水线传输时间计算]</strong> 40. HTTP/1.1流水线持久连接获取网页(html 1MSS + 图像 3MSS)，RTT=10ms，最少需要几个RTT完成传输(3/4/5/6)。考虑TCP握手捎带请求及慢开始窗口增长。　<strong>〔答案：B〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2022·以太网/CSMA-CD/DHCP/WLAN/帧地址]</strong> 47. (1)设备1选交换机(隔离冲突域)，设备2选集线器(不隔离);(2)CSMA/CD最短帧长公式求H2-H3最远距离D=210m;(3)报文M为DHCP DISCOVER广播帧，目的MAC全F，路由器E0接口可收到;(4)H5收到来自AP的帧中地址1=接收端MAC、地址2=AP的MAC、地址3=发送端MAC。　<strong>〔答案：见解析(网络综合分析题)〕</strong></li>
+</ul>
+<h2>2023年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2023·分组交换网络/端到端延迟计算]</strong> 33. 分组交换网络中主机H1和H2通过路由器互连，链路带宽均为100Mbps，时延带宽积均为1000bits。若H1向H2发送1MB文件，分组长度1000B，从H1开始发送到H2收到全部数据至少需要时间(M=10^6)()。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2023·QAM调制/调制方案选择]</strong> 34. 某无噪声理想信道带宽为4MHz，采用QAM调制，最大数据传输率48Mbps，则该信道采用的QAM调制方案是()。A.QAM-16 B.QAM-32 C.QAM-64 D.QAM-128　<strong>〔答案：C〕</strong></li>
+<li><strong>[2023·可靠传输协议/停止等待-GBN-SR信道利用率比较]</strong> 35. 假设同一信道分别采用停止-等待协议、GBN协议和SR协议传输数据，三个协议的数据帧长相同，忽略确认帧长度，帧序号位数为3比特。对应三个协议发送方最大信道利用率U1,U2,U3，满足的关系是()。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2023·以太网/二进制指数退避重传时间]</strong> 36. 已知10BaseT以太网争用时间为51.2us，网卡发送某帧时发生连续4次冲突，基于二进制指数退避算法确定的再次尝试重发前需等待的最长时间是()。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2023·CRC校验/生成多项式G(x)]</strong> 37. 若甲向乙发送数据时采用CRC校验，生成多项式G(x)=x^4+x+1(即G=10011)，乙接收到下列比特串时可断定其在传输过程中未发生错误的是()。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2023·NAT/源IP地址转换]</strong> 38. 某网络拓扑如图，路由器R2实现NAT功能。主机H向Internet发送IP分组，经R2转发后的源IP地址是()。网络:195.123.0.34/30, NAT R2, 192.168.0.1, H:192.168.0.3　<strong>〔答案：A〕</strong></li>
+<li><strong>[2023·子网划分/最小和最大可分配IP]</strong> 39. 主机168.16.84.24/20所在子网的最小可分配IP地址和最大可分配IP地址分别是()。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2023·IPv4与IPv6对比]</strong> 40. 下列关于IPv4和IPv6的叙述中，正确的是()。I.IPv6地址空间是IPv4的96倍 II.IPv4首部和IPv6基本首部长度均可变 III.IPv4向IPv6过渡可采用双栈和隧道技术 IV.IPv6首部Hop-Limit字段等价于IPv4首部TTL字段　<strong>〔答案：B〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2023·FTP/TCP传输/拥塞窗口与吞吐量计算]</strong> 47. 网络拓扑如图(H-交换机-路由器-Internet-FTP服务器)。H登录FTP服务器后上传18000B文件F。TCP连接初始序号100，MSS=1000B，拥塞窗口初始阈值4MSS，RTT=10ms，忽略传输延时，无差错丢包乱序。(1)FTP控制连接持久还是非持久？数据连接？建立的是控制还是数据连接？(2)H发F第一个字节序号？第二次握手ACK确认号？(3)收到确认2101时拥塞窗口调整？收到7101时调整？(4)从请求数据连接到F被全部接收最少时间？期间平均速率？　<strong>〔答案：见解析〕</strong></li>
+</ul>
+<h2>2024年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2024·带宽vs吞吐量/瓶颈链路决定整体性能]</strong> 33. H1到H2之间有多条路径可选(双1000Mb/s / 1Mb/s / 双100Mb/s)，但都必须经过H1-路由器(10Mb/s)和路由器-H2(10Mb/s)两条链路，最大吞吐量为(1000Mb/s / 10Mb/s / 1Mb/s / 100Mb/s)。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2024·数字调制技术/FSK频移键控]</strong> 34. 下列调制方式中使用两种不同频率载波的是(ASK幅移键控 / FSK频移键控 / PSK相移键控 / DPSK差分相移键控)。FSK通过改变频率传输0和1。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2024·VLAN划分与ARP表/跨VLAN通信限制]</strong> 35. H4位于VLAN1，交换机按端口划分VLAN。下列不会出现在H4 ARP表中的主机是(H2(VLAN1) / H1(VLAN1) / H3(VLAN1) / H6(VLAN3))。跨VLAN主机无法直接通信故不在ARP表中。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2024·CSMA/CA协议/NAV网络分配向量计算]</strong> 36. WLAN中AP发送CTS帧后隐藏站B计算的NAV值(SIFS=28μs，数据帧1998B@54Mbps传输时延296μs，ACK 2μs)，NAV=(280μs / 354μs / 382μs / 456μs)。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2024·选择重传SR协议/滑动窗口与超时重发]</strong> 37. SR协议序号3bit，收发窗口均为4。甲发F0-F3(F1丢失)，t1时刻收到F0确认后发F4，t2时刻收到F2确认后F1超时重发。t1和t2分别发送(F4和F1 / F4和F2 / F1和F4 / ...)。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2024·TCP连接管理/从建立到CLOSED总时间(RTT+MSL)]</strong> 38. RTT=15s，MSL≈2s。从H请求建立连接到进入CLOSED状态的最短时间(4RTT=60s / 4RTT+2MSL=64s / 60.04s / 其他)。含建立1RTT、慢开始数据传输2RTT、挥手1RTT、等待2MSL。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2024·UDP校验和/二进制加法进位回卷取反]</strong> 39. UDP校验和最后一步求和：1011 1001 1011 0110 + 0110 0101 1100 0101，结果超过16位需进位回卷再按位取反得(1110 0000 1000 0011 / 其他)。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2024·HTTP/1.0非持久连接/总RTT计算]</strong> 40. HTTP/1.0非持久连接获取含1个主页面+7个图像的网页，总共需要(8RTT / 14RTT / 16RTT / 24RTT)。每个资源需单独TCP连接(建连1RTT+传输1RTT)=2RTT，共8×2=16RTT。　<strong>〔答案：D〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2024·OSPF与BGP路由协议/AS内部与外部路由]</strong> 47. (1)AS4自治系统内部应选OSPF协议；(2)初始TTL值至少设为16(穿越15个AS)；(3)R11-R16获得210.2.3.0/24路由至少30s，获得210.2.4.0/24至少60s；(4)外部路由由eBGP UPDATE通告，R13通过iBGP通告R14/R15；(5)R14下一跳R11，R15下一跳R13。　<strong>〔答案：见解析(路由协议分析题)〕</strong></li>
+</ul>
+<h2>2025年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2025·交换方式比较/电路交换vs报文交换vs分组交换传输时间]</strong> 33. 发送2MB数据，链路速率10Mbps，建立时间32μs，分组大小400B：(A)电路交换Tcs≈1.6s+32μs (B)报文交换Tms&gt;Tcs (C)分组交换Tps&lt;Tcs&lt;Tms。三者的时间关系排序。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2025·检纠错编码/最小码距d_min决定检错纠错能力]</strong> 34. 编码集最小码距为3时可检≤3位错、纠≤1位错。给定编码10011010与01011100码距为4，与其他编码最小码距为3。检错能力(≤3位)纠错能力(≤1位)。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2025·以太网CSMA/CD/二进制指数退避最大延迟计算]</strong> 35. 冲突后第11次重传，退避槽位数k=min(11,16)=11，时隙51.2μs。最大退避延迟=(2^11-1)×51.2μs=(约104.8ms / 其他选项)。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2025·DHCP协议/REQUEST报文源目地址设置]</strong> 36. DHCP REQUEST报文由客户端发送请求确认IP地址，此时客户端尚未分配正式IP，源地址为(0.0.0.0)，目的地址为(255.255.255.255广播)。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2025·NAT网络地址转换/修改字段与校验和重算]</strong> 37. NAT转换时修改IP数据报(源IP地址)；UDP首部(源端口号)可能被修改(端口复用时)；(校验和)需重新计算；(总长度)不变；(目的端口号)不变。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2025·TCP拥塞窗口/发送窗口剩余可发数据量计算]</strong> 38. 甲拥塞窗口cwnd=2000B，MSS=1000B，已发送seq=30和1000两个段。收到ack=1001,rwnd=2000后，剩余可发送(1/2/3)个段。min(cwnd,rwnd)=2000B，已发未确认1000B。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2025·UDP vs TCP/连接开销与往返时间对比]</strong> 39. UDP无连接，一次请求-响应往返8ms；TCP需三次握手(至少1RTT)+请求响应(1RTT)=最少2次往返共(12ms/16ms/其他)。RTT=8ms时TCP最少总时间16ms。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2025·电子邮件协议/POP3收信SMTP发信]</strong> 40. (POP3)协议支持用户代理从邮件服务器读取邮件，通过一条TCP连接收取多封邮件；发送邮件使用(SMTP)协议；邮件服务器间通信也用SMTP。　<strong>〔答案：B〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2025·网络计算综合/传播时延吞吐量/GBN窗口/子网划分]</strong> 47. (1)卫星链路36000km，单向传播120ms，带宽200Kbps，传4000B文件总时间0.4s。(2)GBN信道利用率≥80%→W≥4，序号≥5需3bit。(3)10.10.10.0/24划3子网：生活区/25(≥120台)、作业区/26(≥60台)、管理区/26(≥60台)。　<strong>〔答案：见解析(网络综合计算题)〕</strong></li>
+</ul>
+<h2>2026年</h2>
+<p><strong>【选择题】</strong></p>
+<ul>
+<li><strong>[2026·体系结构]</strong> 33. 关于分层网络体系结构的叙述中，错误的是哪项。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2026·物理层/信道容量]</strong> 34. 带宽200kHz、信噪比S/N=1023的信道，发送1500B分组，求传输时延至少。　<strong>〔答案：D〕</strong></li>
+<li><strong>[2026·数据链路层/CSMA-CA]</strong> 35. CSMA/CA的IEEE802.11，速率300Mbps，DIFS=128us，SIFS=28us，发送1500B帧，求发送确认接收所需时间至少。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2026·数据链路层/VLAN]</strong> 36. 支持VLAN划分的以太网交换机，给定拓扑和MAC地址，H3会接收到的帧。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2026·网络层/路由]</strong> 37. 链路状态路由算法，R1到R2链路断开，求R1重新计算并聚合后路由表中路由项数量。　<strong>〔答案：B〕</strong></li>
+<li><strong>[2026·网络层/路由协议]</strong> 38. 能将自治系统划分为多个区域的内部网关协议是哪项。　<strong>〔答案：A〕</strong></li>
+<li><strong>[2026·网络层/子网划分]</strong> 39. 将123.4.4.0/22划分为32个规模均衡子网，求123.4.5.11所在子网。　<strong>〔答案：C〕</strong></li>
+<li><strong>[2026·应用层/Cookie]</strong> 40. 下列不属于cookie技术典型用途的是哪项。　<strong>〔答案：D〕</strong></li>
+</ul>
+<p><strong>【综合应用题】</strong></p>
+<ul>
+<li><strong>[2026·TCP]</strong> 47. TCP连接上传2000B文件，cwnd初始8MSS，MSS=500B，rwnd=1000B，RTT=5ms，初始序号1000/2000。(1)握手次数及SYN=1,ACK=1段确认序号(2)接收ACK后cwnd和发送窗口(3)释放连接挥手次数及最后报文段seq/ack/FIN(4)确定成功接收文件时间。　<strong>〔答案：(1)3次；1001 (2)cwnd=3MSS=1500B，发送窗口=min(1500,1000)=1000B (3)4次；FIN=1,seq=2001,ack_seq=3002 (4)20ms〕</strong></li>
+</ul>
+</article>
+<div class="pagenav"><a href="index.html">← 返回首页</a><span></span></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

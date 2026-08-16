@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DS-01 栈与队列应用 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x on" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #c0392b">
+<h1>DS-01 栈与队列应用</h1>
+<blockquote>
+<p>凸包顶点 · 数据结构 | 考频：3 次综合题（2009 / 2012 / 2015）+ 选择题常客 | 难度：★★
+定位：难度最低、最能稳定拿分的顶点，是"送分边界"。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>栈与队列位于凸包的<strong>左下角</strong>——考频中等、难度最低。它界定了 408 数据结构的"难度地板"：
+综合题若考它，必须拿满分；选择题每年都会以它为背景出 1~2 题（出入栈序列、循环队列）。</p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 栈（LIFO）</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>关键结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>出入栈序列合法性</td>
+<td>n 个元素不同入栈顺序，合法出栈序列数 = <strong>Catalan 数 C(2n,n)/(n+1)</strong></td>
+</tr>
+<tr>
+<td>合法性判定</td>
+<td>模拟：任何前缀中"出栈次数 ≤ 入栈次数"</td>
+</tr>
+<tr>
+<td>括号匹配</td>
+<td>遇左括号入栈，遇右括号弹栈比对，结束时栈空</td>
+</tr>
+<tr>
+<td>表达式求值</td>
+<td>中缀 → 后缀（运算符栈，按优先级弹栈），后缀求值（操作数栈）</td>
+</tr>
+<tr>
+<td>递归消除</td>
+<td>函数调用栈帧 = 系统栈；二叉树遍历非递归 = 显式栈</td>
+</tr>
+</tbody>
+</table>
+<p><strong>中缀转后缀规则</strong>（选择题高频）：
+1. 操作数直接输出；
+2. 左括号入栈；
+3. 右括号 → 弹栈输出直到左括号；
+4. 运算符 → 弹出所有<strong>优先级 ≥ 它</strong>的栈顶运算符后入栈；
+5. 扫描结束，弹空栈。</p>
+<h3>2.2 队列（FIFO）</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>关键结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>循环队列判空</td>
+<td><code>front == rear</code></td>
+</tr>
+<tr>
+<td>循环队列判满（牺牲一单元）</td>
+<td><code>(rear + 1) % MaxSize == front</code></td>
+</tr>
+<tr>
+<td>队列长度</td>
+<td><code>(rear - front + MaxSize) % MaxSize</code></td>
+</tr>
+<tr>
+<td>双端队列</td>
+<td>限制一端出入后的合法序列判定（真题考过）</td>
+</tr>
+<tr>
+<td>队列应用</td>
+<td>层序遍历、BFS、缓冲区</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>三、典型考法与真题锚点</h2>
+<ol>
+<li><strong>出栈序列合法性</strong>（几乎年年选择题）：给一个出栈序列问是否可能 → 模拟栈验证。</li>
+<li><strong>循环队列计算</strong>：给 front/rear 求元素个数，或入队出队后求指针位置。</li>
+<li><strong>综合题（2009/2012/2015）</strong>：用栈或队列作为算法的辅助结构，例如借助栈完成某种转换。</li>
+</ol>
+<p><strong>答题模板</strong>：判合法 → 模拟过程画栈状态表 → 数操作次数。</p>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ Catalan 数只能回答"总数"，判断<strong>某个具体序列</strong>是否合法必须模拟。</li>
+<li>⚠️ 循环队列"判满"有两种约定（牺牲单元法 vs 计数器法），看题目定义。</li>
+<li>⚠️ 双端队列出队序列：分"只从一端出"和"两端都可出"两种题型，结论不同。</li>
+<li>⚠️ 中缀转后缀时，<strong>相同优先级</strong>的运算符也要弹栈（左结合性）。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<p>半天即可通关：做 10 道出栈序列选择 + 5 道循环队列计算 + 默写一遍括号匹配与后缀求值代码。
+这个顶点的战略意义是：<strong>用最少的投入，封住凸包的下边界</strong>。</p>
+</article>
+<div class="pagenav"><a href="co-04.html">← CO-04 CPU数据通路设计</a><a href="ds-02.html">→ DS-02 二叉树与BST</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

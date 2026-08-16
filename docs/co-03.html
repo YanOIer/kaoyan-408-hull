@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CO-03 Cache与存储层次 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x on" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #1f6f8b">
+<h1>CO-03 Cache 与存储层次</h1>
+<blockquote>
+<p>凸包顶点 · 组成原理 | 考频：5 次综合题（2013 / 2017 / 2020 / 2021 / 2025）| 难度：★★★★
+定位：组原计算题第一大户，也是 CO×OS 跨科链路（Cache–主存–虚存–TLB）的中枢。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>Cache 考频 5 次、几乎"隔年必考"，且每考必是完整计算大题。它向上承接虚存
+（OS 内存管理），向下触及主存组织，是凸包右上区最"厚实"的顶点：
+<strong>Cache 题 = 地址划分 + 命中判断 + 性能计算</strong>，三步走通了就是稳定 10 分。</p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 地址划分（一切的起点）</h3>
+<p>主存地址 = | 标记 Tag | 组号/行号 Index | 块内地址 Offset |</p>
+<table>
+<thead>
+<tr>
+<th>映射方式</th>
+<th>地址结构</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接映射</td>
+<td>标记 + <strong>行号</strong> + 块内</td>
+<td>每组 1 行，冲突最多，硬件最简单</td>
+</tr>
+<tr>
+<td>全相联</td>
+<td>标记 + 块内</td>
+<td>任意放，冲突最少，比较器最贵</td>
+</tr>
+<tr>
+<td>组相联</td>
+<td>标记 + <strong>组号</strong> + 块内</td>
+<td>折中；n 路 = 每组 n 行</td>
+</tr>
+</tbody>
+</table>
+<p><strong>速算</strong>：块内地址位数 = log₂(块大小)；组号位数 = log₂(组数)；剩下全是标记。
+<code>组数 = Cache行数 / 相联度</code>，<code>Cache行数 = Cache数据容量 / 块大小</code>。</p>
+<h3>2.2 命中与性能计算</h3>
+<pre><code>命中率 h = 命中次数 / 总访问次数
+平均访问时间 Ta = h·Tc + (1−h)·Tm        （先访问 Cache，缺失再访主存）
+              或 = Tc + (1−h)·Tm         （看题目是否重叠，读题！）
+</code></pre>
+<ul>
+<li>Tc：Cache 存取时间；Tm：主存存取时间（或缺失损失）。</li>
+<li><strong>效率 e = Tc / Ta</strong>。</li>
+</ul>
+<h3>2.3 替换算法与写策略</h3>
+<table>
+<thead>
+<tr>
+<th>替换算法</th>
+<th>实现</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>随机</td>
+<td>简单</td>
+<td>不公平</td>
+</tr>
+<tr>
+<td>FIFO</td>
+<td>队列</td>
+<td>可能 Belady 异常</td>
+</tr>
+<tr>
+<td><strong>LRU</strong></td>
+<td>计数器/栈</td>
+<td>命中率高，408 最常考</td>
+</tr>
+<tr>
+<td>LFU</td>
+<td>访问计数</td>
+<td>开销大</td>
+</tr>
+</tbody>
+</table>
+<p>写策略：
+- <strong>写直达 WT</strong>：同时写 Cache 和主存（一致性好，常配写缓冲）；
+- <strong>写回 WB</strong>：只写 Cache，<strong>脏位=1</strong> 的行被替换时才写回主存（省带宽）。</p>
+<p>写缺失：写分配（先调入 Cache）vs 非写分配（直接写主存）。</p>
+<h3>2.4 跨科链路（408 特色综合点）</h3>
+<pre><code>CPU 给出 VA ──TLB/页表──→ PA ──Cache 地址划分──→ 命中? 读数据 : 访主存
+                ↑OS 内存管理        ↑CO 存储层次
+</code></pre>
+<p>虚拟 Cache / 物理 Cache、TLB 与 Cache 的访问次序，是 CO×OS 交界的高阶考点。</p>
+<hr />
+<h2>三、典型考法</h2>
+<ol>
+<li><strong>地址划分</strong>：给容量/块大小/相联度，求 Tag/Index/Offset 各几位（必考）。</li>
+<li><strong>命中过程追踪</strong>：给一串地址访问序列，判断每次命中/缺失、画出最终 Cache 内容。</li>
+<li><strong>性能计算</strong>：求命中率、平均访问时间、加速比。</li>
+<li><strong>综合</strong>：Cache + 虚存 + 磁盘一条链（2020/2025 风格），跨科大题。</li>
+</ol>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ Cache 容量题目给的是<strong>数据部分</strong>，不含标记位/有效位阵列（除非明说"总容量"）。</li>
+<li>⚠️ 直接映射的"行号"和组相联的"组号"位数不同，别混。</li>
+<li>⚠️ LRU 模拟时<strong>每次访问（命中也算）都要更新</strong>使用次序。</li>
+<li>⚠️ 写回法替换时先检查脏位——脏行要写回主存，影响总时间。</li>
+<li>⚠️ "按字节编址"还是"按字编址"决定块内地址位数，审题第一刀。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li>默写三种映射的地址划分流程，做到"给参数 30 秒出结果"；</li>
+<li>手工模拟 5 组访问序列（含 LRU），画出每步 Cache 状态；</li>
+<li>精做 2013/2017/2020/2021/2025 五年 Cache 综合题——它们是同一道题的五次换装。</li>
+</ol>
+</article>
+<div class="pagenav"><a href="co-02.html">← CO-02 指令流水线</a><a href="co-04.html">→ CO-04 CPU数据通路设计</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

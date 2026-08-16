@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>408计算机学科专业基础综合 · 历年考题分析汇 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x on" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #8a857c">
+<h1>408计算机学科专业基础综合 · 历年考题分析汇总（2009-2026）</h1>
+<blockquote>
+<p>基于2009-2026年历年真题的整体趋势分析
+适用2026考生</p>
+</blockquote>
+<hr />
+<h2>一、408考试演变史（2009-2026）</h2>
+<h3>1.1 考试结构调整</h3>
+<table>
+<thead>
+<tr>
+<th>年份</th>
+<th>选择题</th>
+<th>综合题</th>
+<th>重要变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009-2011</td>
+<td>40题/80分</td>
+<td>7题/70分</td>
+<td>初始结构</td>
+</tr>
+<tr>
+<td>2012-2015</td>
+<td>40题/80分</td>
+<td>7题/70分</td>
+<td>综合题难度提升</td>
+</tr>
+<tr>
+<td>2016-2020</td>
+<td>40题/80分</td>
+<td>7题/70分</td>
+<td>组原综合题固定化</td>
+</tr>
+<tr>
+<td>2021-2026</td>
+<td>40题/80分</td>
+<td>7题/70分</td>
+<td>算法设计题更灵活</td>
+</tr>
+</tbody>
+</table>
+<h3>1.2 难度变化趋势</h3>
+<pre><code>难度
+ ↑
+ ║     ●2026 (灵活算法设计)
+ ║    /
+ ║   ●2025 (最大最小值乘积)
+ ║  /
+ ║ ●2022 (图算法代码)
+ ║/
+ ║●2016 (组原数据通路)
+ ║
+ ║●2009 (基础)
+ ║
+ └────────────────────────→ 年份
+  2009 2012 2016 2020 2022 2025 2026
+</code></pre>
+<p><strong>难度提升的主要原因</strong>：
+1. 算法设计题不再是模板题，需要真正理解算法思想
+2. 组原数据通路设计题成为固定综合题，难度高
+3. 操作系统P/V操作题出现变种，需要灵活运用
+4. 网络综合题虽然难度低，但要求更准确的计算</p>
+<hr />
+<h2>二、各科考点分布演变</h2>
+<h3>2.1 数据结构</h3>
+<table>
+<thead>
+<tr>
+<th>时期</th>
+<th>高频考点</th>
+<th>综合题特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009-2015</td>
+<td>图遍历、排序代码</td>
+<td>传统题型，代码默写</td>
+</tr>
+<tr>
+<td>2016-2021</td>
+<td>图算法、排序、BST</td>
+<td>开始考查算法优化</td>
+</tr>
+<tr>
+<td>2022-2026</td>
+<td>图算法代码、灵活算法设计</td>
+<td><strong>2022 Dijkstra、2025 最大最小值乘积、2026 BST优化查找</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>趋势</strong>：算法设计题越来越灵活，不能只背模板</p>
+<h3>2.2 计算机组成原理</h3>
+<table>
+<thead>
+<tr>
+<th>时期</th>
+<th>高频考点</th>
+<th>综合题特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009-2015</td>
+<td>Cache计算、流水线</td>
+<td>计算题为主</td>
+</tr>
+<tr>
+<td>2016-2021</td>
+<td>数据通路设计、Cache</td>
+<td><strong>数据通路设计固定为综合题</strong></td>
+</tr>
+<tr>
+<td>2022-2026</td>
+<td>数据通路+指令系统</td>
+<td><strong>2024-2026连续三年考数据通路</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>趋势</strong>：数据通路设计题是组原综合题的核心，必须掌握</p>
+<h3>2.3 操作系统</h3>
+<table>
+<thead>
+<tr>
+<th>时期</th>
+<th>高频考点</th>
+<th>综合题特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009-2015</td>
+<td>P/V操作基础</td>
+<td>经典题型</td>
+</tr>
+<tr>
+<td>2016-2021</td>
+<td>P/V操作变种</td>
+<td>开始考查灵活运用</td>
+</tr>
+<tr>
+<td>2022-2026</td>
+<td>P/V操作、进程调度分析</td>
+<td><strong>2026年出了进程调度分析题</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>趋势</strong>：P/V操作仍然是核心，但会出现分析题（不只是写代码）</p>
+<h3>2.4 计算机网络</h3>
+<table>
+<thead>
+<tr>
+<th>时期</th>
+<th>高频考点</th>
+<th>综合题特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009-2015</td>
+<td>IP子网划分、TCP</td>
+<td>基础题</td>
+</tr>
+<tr>
+<td>2016-2021</td>
+<td>IP子网划分、路由聚合</td>
+<td>计算题</td>
+</tr>
+<tr>
+<td>2022-2026</td>
+<td>TCP全过程、子网划分</td>
+<td><strong>2026年TCP综合题（9分）</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>趋势</strong>：网络综合题难度低，必须拿满分</p>
+<hr />
+<h2>三、2009-2026年各年难度评级</h2>
+<table>
+<thead>
+<tr>
+<th>年份</th>
+<th>整体难度</th>
+<th>数据结构</th>
+<th>组原</th>
+<th>操作系统</th>
+<th>网络</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐</td>
+<td>第一年，基础</td>
+</tr>
+<tr>
+<td>2010</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>2011</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>略有提升</td>
+</tr>
+<tr>
+<td>2012</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>图算法代码</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>组原难度提升</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>全面难度提升</td>
+</tr>
+<tr>
+<td>2015</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td><strong>组原最难一年</strong></td>
+</tr>
+<tr>
+<td>2017</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>操作系统难度提升</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>数据结构最难</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>均衡难度</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>组原难</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>数据结构最难</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td><strong>图算法代码</strong></td>
+</tr>
+<tr>
+<td>2023</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td><strong>组原数据通路</strong></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td><strong>全面难</strong></td>
+</tr>
+<tr>
+<td>2025</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>算法设计灵活</td>
+</tr>
+<tr>
+<td>2026</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td><strong>最新，灵活</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>四、高频考点统计（2009-2026）</h2>
+<h3>4.1 数据结构 - 综合题考点统计</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>出现年份</th>
+<th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图算法（DFS/BFS/Dijkstra/Prim）</td>
+<td>2012,2015,2018,2022,2023</td>
+<td>5次</td>
+</tr>
+<tr>
+<td>排序算法代码</td>
+<td>2011,2014,2017,2020,2023</td>
+<td>5次</td>
+</tr>
+<tr>
+<td>二叉树/ BST</td>
+<td>2010,2013,2016,2019,2026</td>
+<td>5次</td>
+</tr>
+<tr>
+<td>算法设计（灵活题型）</td>
+<td>2024,2025,2026</td>
+<td>3次</td>
+</tr>
+<tr>
+<td>栈/队列应用</td>
+<td>2009,2012,2015</td>
+<td>3次</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 组原 - 综合题考点统计</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>出现年份</th>
+<th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU数据通路设计</td>
+<td>2016,2019,2022,2023,2024,2025,2026</td>
+<td>7次</td>
+</tr>
+<tr>
+<td>Cache分析</td>
+<td>2013,2017,2020,2021,2025</td>
+<td>5次</td>
+</tr>
+<tr>
+<td>流水线计算</td>
+<td>2012,2015,2018</td>
+<td>3次</td>
+</tr>
+<tr>
+<td>指令系统设计</td>
+<td>2014,2026</td>
+<td>2次</td>
+</tr>
+</tbody>
+</table>
+<h3>4.3 操作系统 - 综合题考点统计</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>出现年份</th>
+<th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P/V操作（进程同步）</td>
+<td>2010,2013,2016,2019,2022,2025</td>
+<td>6次</td>
+</tr>
+<tr>
+<td>内存管理（地址转换/页面置换）</td>
+<td>2011,2014,2017,2020,2023</td>
+<td>5次</td>
+</tr>
+<tr>
+<td>文件系统</td>
+<td>2012,2015,2018,2021,2024,2026</td>
+<td>6次</td>
+</tr>
+<tr>
+<td>进程调度分析</td>
+<td>2026</td>
+<td>1次</td>
+</tr>
+</tbody>
+</table>
+<h3>4.4 网络 - 综合题考点统计</h3>
+<table>
+<thead>
+<tr>
+<th>考点</th>
+<th>出现年份</th>
+<th>次数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IP子网划分/路由聚合</td>
+<td>2009,2012,2015,2018,2021,2024</td>
+<td>6次</td>
+</tr>
+<tr>
+<td>TCP连接管理</td>
+<td>2011,2014,2017,2020,2023,2026</td>
+<td>6次</td>
+</tr>
+<tr>
+<td>时延计算</td>
+<td>2010,2013,2016,2019,2022</td>
+<td>5次</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>五、复习优先级建议（基于历年趋势）</h2>
+<h3>5.1 必须掌握的核心考点（出现概率&gt;80%）</h3>
+<ol>
+<li><strong>数据结构</strong>：</li>
+<li>✅ 图DFS/BFS代码（必考）</li>
+<li>✅ 快排/归并/堆排序代码（必考）</li>
+<li>✅ 二叉树遍历（必考）</li>
+<li>
+<p>✅ 哈夫曼树（高频）</p>
+</li>
+<li>
+<p><strong>组原</strong>：</p>
+</li>
+<li>✅ CPU数据通路设计（7年考了7次！）</li>
+<li>✅ Cache地址计算（必考）</li>
+<li>
+<p>✅ IEEE754浮点数（每年考）</p>
+</li>
+<li>
+<p><strong>操作系统</strong>：</p>
+</li>
+<li>✅ P/V操作（6次）</li>
+<li>✅ 页面置换算法（必考）</li>
+<li>
+<p>✅ 进程状态转换（必考）</p>
+</li>
+<li>
+<p><strong>网络</strong>：</p>
+</li>
+<li>✅ TCP三次握手/四次挥手（必考）</li>
+<li>✅ IP子网划分（必考）</li>
+<li>✅ 拥塞控制（高频）</li>
+</ol>
+<h3>5.2 可以适度放弃的考点（出现概率&lt;20%）</h3>
+<ul>
+<li>数据结构的串匹配（KMP）— 偶尔考</li>
+<li>组原的并行处理系统（第9章）— 几乎不考</li>
+<li>操作系统的设备管理（磁盘调度）— 选择题偶尔考</li>
+<li>网络的安全（第7章）— 了解即可</li>
+</ul>
+<hr />
+<h2>六、2009-2026年复习时间线建议</h2>
+<h3>阶段一：基础理解（现在 - 8月）</h3>
+<p><strong>重点</strong>：2009-2015年真题（难度适中，适合入门）</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>任务</th>
+<th>真题年份</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6月</td>
+<td>数据结构基础</td>
+<td>2009-2011</td>
+</tr>
+<tr>
+<td>7月</td>
+<td>组原基础</td>
+<td>2012-2014</td>
+</tr>
+<tr>
+<td>8月</td>
+<td>操作系统+网络基础</td>
+<td>2015</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段二：真题训练（9月 - 10月）</h3>
+<p><strong>重点</strong>：2016-2022年真题（难度提升，综合题固定化）</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>任务</th>
+<th>真题年份</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9月上</td>
+<td>数据结构真题</td>
+<td>2016-2019</td>
+</tr>
+<tr>
+<td>9月下</td>
+<td>组原真题</td>
+<td>2016-2019</td>
+</tr>
+<tr>
+<td>10月上</td>
+<td>操作系统真题</td>
+<td>2020-2022</td>
+</tr>
+<tr>
+<td>10月下</td>
+<td>网络真题</td>
+<td>2020-2022</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段三：冲刺模拟（11月 - 12月）</h3>
+<p><strong>重点</strong>：2023-2026年真题（最新，难度最高）</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>任务</th>
+<th>真题年份</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11月上</td>
+<td>2023-2024真题</td>
+<td>最新题型</td>
+</tr>
+<tr>
+<td>11月下</td>
+<td>2025真题</td>
+<td>算法设计</td>
+</tr>
+<tr>
+<td>12月上</td>
+<td>2026真题</td>
+<td>最新趋势</td>
+</tr>
+<tr>
+<td>12月下</td>
+<td>模拟题</td>
+<td>限时训练</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>七、总结</h2>
+<ol>
+<li><strong>408考试难度逐年提升</strong>，特别是算法设计题和组原数据通路题</li>
+<li><strong>高频考点非常稳定</strong>，掌握核心考点即可覆盖80%以上内容</li>
+<li><strong>近年真题（2020-2026）最重要</strong>，反映了最新出题趋势</li>
+<li><strong>网络是性价比最高的科目</strong>，短期突击可以拿高分</li>
+<li><strong>组原是最难的科目</strong>，需要最多时间复习</li>
+</ol>
+<hr />
+<p><em>汇总分析生成时间：2026年6月</em>
+<em>基于2009-2026年408历年真题趋势分析</em></p>
+</article>
+<div class="pagenav"><a href="index.html">← 返回首页</a><span></span></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

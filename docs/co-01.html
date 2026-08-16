@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CO-01 指令系统设计 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x on" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #1f6f8b">
+<h1>CO-01 指令系统设计</h1>
+<blockquote>
+<p>凸包顶点 · 组成原理 | 考频：2 次综合题（2014 / 2026）+ 选择题高频 | 难度：★★★★
+定位：组原的"左上边界"——低频高难，但 2026 年重现，必须与数据通路打通。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>指令系统考频最低（2 次），却是组原凸包的<strong>左上顶点</strong>：它向上连接数据通路
+（数据通路综合题的指令格式就来自这里），向下定义了 CPU 能做什么。
+2026 年再次进入综合题，说明它已从"冷门"变为"必修"。</p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 指令格式</h3>
+<pre><code>| 操作码 OP | 地址码/操作数 A |
+</code></pre>
+<ul>
+<li><strong>定长操作码</strong>：n 位操作码 → 最多 2ⁿ 条指令。</li>
+<li><strong>扩展操作码（重点）</strong>：地址数少的指令"借位"扩展操作码。
+  例：16 位指令，三地址指令 OP 占 4 位；当三地址指令用完 N 种编码后，
+  剩余编码空间可扩展为二地址指令（OP 扩到 8 位），依此类推。
+  计算原则：<strong>每种格式预留编码空间 = 上一级剩余编码 × 每多 4 位扩 16 倍</strong>。</li>
+</ul>
+<h3>2.2 寻址方式（选择题 + 综合题必考）</h3>
+<table>
+<thead>
+<tr>
+<th>寻址方式</th>
+<th>有效地址 EA</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>立即寻址</td>
+<td>操作数 = A</td>
+<td>快，范围受限</td>
+</tr>
+<tr>
+<td>直接寻址</td>
+<td>EA = A</td>
+<td>一次访存</td>
+</tr>
+<tr>
+<td>间接寻址</td>
+<td>EA = (A)</td>
+<td>多次访存，扩大寻址范围</td>
+</tr>
+<tr>
+<td>寄存器寻址</td>
+<td>操作数 = (R)</td>
+<td>不访存，最快</td>
+</tr>
+<tr>
+<td>寄存器间接</td>
+<td>EA = (R)</td>
+<td>一次访存</td>
+</tr>
+<tr>
+<td>相对寻址</td>
+<td><strong>EA = (PC) + A</strong></td>
+<td>浮动代码、转移指令</td>
+</tr>
+<tr>
+<td>基址寻址</td>
+<td>EA = (基址R) + A</td>
+<td>程序重定位，OS 用</td>
+</tr>
+<tr>
+<td>变址寻址</td>
+<td>EA = (变址R) + A</td>
+<td>数组遍历，A 为基准</td>
+</tr>
+<tr>
+<td>堆栈寻址</td>
+<td>EA = (SP)</td>
+<td>隐式地址</td>
+</tr>
+</tbody>
+</table>
+<p><strong>相对 vs 基址 vs 变址辨析</strong>（真题高频陷阱）：
+- 相对寻址：基准是 <strong>PC</strong>，为<strong>程序浮动/转移</strong>服务；
+- 基址寻址：基准由 <strong>OS 赋初值</strong>，用户不变，为<strong>重定位</strong>服务；
+- 变址寻址：基准 A 不变，<strong>变址寄存器用户可改</strong>，为<strong>数组/循环</strong>服务。</p>
+<h3>2.3 CISC 与 RISC</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CISC</th>
+<th>RISC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>指令数</td>
+<td>多</td>
+<td>少</td>
+</tr>
+<tr>
+<td>指令长度</td>
+<td>可变</td>
+<td>定长</td>
+</tr>
+<tr>
+<td>寻址方式</td>
+<td>多</td>
+<td>少</td>
+</tr>
+<tr>
+<td>访存指令</td>
+<td>任意</td>
+<td><strong>仅 Load/Store</strong></td>
+</tr>
+<tr>
+<td>控制</td>
+<td>微程序</td>
+<td>硬布线为主</td>
+</tr>
+<tr>
+<td>流水线</td>
+<td>难</td>
+<td>易</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>三、典型考法</h2>
+<ol>
+<li><strong>扩展操作码计算</strong>：给指令字长和各格式条数，问能否实现 / 最多几条。</li>
+<li><strong>寻址方式计算</strong>：给机器码求有效地址、取到的操作数（结合内存内容表）。</li>
+<li><strong>与数据通路结合（2026 方向）</strong>：设计一条指令的格式 + 写出它的微操作流程。</li>
+</ol>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ 扩展操作码：低地址数格式消耗的是高地址数格式"剩下的编码"，不是全部 2ⁿ。</li>
+<li>⚠️ 相对寻址取指后 <strong>PC 已 +1</strong>，EA = (PC)+A 用的是加过 1 的值（看题目约定）。</li>
+<li>⚠️ 间接寻址的地址码可能还要经过"间址位"多次解析。</li>
+<li>⚠️ RISC 不等于"指令少"而已，<strong>定长 + Load/Store 结构 + 硬布线</strong>才是本质。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li>做 3 道扩展操作码计算题，掌握"编码空间账簿"算法；</li>
+<li>画一张 9 种寻址方式的 EA 公式卡，配合真题练 5 题；</li>
+<li>把 2014 与 2026 两年的指令系统综合题精做，体会与数据通路的结合方式。</li>
+</ol>
+</article>
+<div class="pagenav"><a href="cn-03.html">← CN-03 TCP连接与拥塞控制</a><a href="co-02.html">→ CO-02 指令流水线</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

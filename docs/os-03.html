@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS-03 PV操作与进程同步 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x on" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #6a8e3f">
+<h1>OS-03 P/V 操作与进程同步</h1>
+<blockquote>
+<p>凸包顶点 · 操作系统 | 考频：6 次综合题（2010 / 2013 / 2016 / 2019 / 2022 / 2025）| 难度：★★★★
+定位：OS 的"王者顶点"——考频并列第一、难度 OS 最高，三年一循环铁律。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>P/V 操作是 OS 凸包的<strong>右上顶点</strong>：6 次大题，几乎每三年必考，且近年出现变种
+（不只是默写经典模型，还要现场设计同步方案）。它是 OS 综合题的"必修课代表"。</p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 信号量机制</h3>
+<pre><code class="language-c">typedef struct {
+    int value;                  // 资源计数
+    struct process *list;       // 阻塞队列
+} semaphore;
+
+P(S) {                          // wait(S)：申请资源
+    S.value--;
+    if (S.value &lt; 0) block(S.list);   // 资源不足，阻塞
+}
+
+V(S) {                          // signal(S)：释放资源
+    S.value++;
+    if (S.value &lt;= 0) wakeup(S.list); // 有等待者，唤醒
+}
+</code></pre>
+<p><strong>信号量取值含义</strong>（选择题必考）：
+- value &gt; 0：可用资源数；
+- value = 0：资源用完，无等待者；
+- value &lt; 0：|value| = 等待队列长度。</p>
+<h3>2.2 两类信号量</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>初值</th>
+<th>用途</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互斥信号量 mutex</td>
+<td><strong>1</strong></td>
+<td>保护临界区</td>
+<td>P/V 在同一进程内<strong>成对夹住临界区</strong></td>
+</tr>
+<tr>
+<td>同步信号量 full/empty</td>
+<td>0 或 n</td>
+<td>协调先后次序</td>
+<td>P 在消费者，V 在生产者，<strong>分居两进程</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>军规</strong>：先检查同步（资源），再检查互斥（mutex）——<strong>同步 P 在前，互斥 P 在后</strong>，否则可能死锁。</p>
+<h3>2.3 三大经典模型（必须默写）</h3>
+<p><strong>① 生产者—消费者</strong>（缓冲池 n 格）：</p>
+<pre><code class="language-c">semaphore mutex = 1, empty = n, full = 0;
+
+producer() {
+    while (1) {
+        生产一个产品;
+        P(empty);          // 等空位
+        P(mutex);          // 进临界区
+        放入缓冲池;
+        V(mutex);
+        V(full);           // 产品 +1
+    }
+}
+
+consumer() {
+    while (1) {
+        P(full);           // 等产品
+        P(mutex);
+        取出产品;
+        V(mutex);
+        V(empty);          // 空位 +1
+        消费产品;
+    }
+}
+</code></pre>
+<p><strong>② 读者—写者</strong>（读者优先，readcount 版本）：</p>
+<pre><code class="language-c">semaphore rw = 1, mutex = 1;   // rw 锁数据库，mutex 锁 readcount
+int readcount = 0;
+
+reader() {
+    P(mutex);
+    if (++readcount == 1) P(rw);   // 第一个读者锁写
+    V(mutex);
+    读;
+    P(mutex);
+    if (--readcount == 0) V(rw);   // 最后一个读者释放
+    V(mutex);
+}
+writer() { P(rw); 写; V(rw); }
+</code></pre>
+<p><strong>③ 哲学家就餐</strong>（防死锁方案：限制同时取筷人数 / 奇偶取筷顺序 / 同时取两支）：</p>
+<pre><code class="language-c">semaphore chop[5] = {1,1,1,1,1};
+semaphore room = 4;            // 方案一：最多 4 人同时取筷
+philosopher(i) {
+    P(room); P(chop[i]); P(chop[(i+1)%5]);
+    吃;
+    V(chop[i]); V(chop[(i+1)%5]); V(room);
+}
+</code></pre>
+<h3>2.4 死锁</h3>
+<ul>
+<li>四条件：<strong>互斥、不可剥夺、请求并保持、循环等待</strong>（缺一不可）；</li>
+<li>处理：预防（破条件）/ 避免（<strong>银行家算法</strong>，安全序列）/ 检测解除（资源分配图）。</li>
+</ul>
+<hr />
+<h2>三、解题五步法（综合题标准动作）</h2>
+<pre><code>1. 找角色：有几类进程，各干什么
+2. 找资源：什么需要互斥（mutex=1），什么需要同步（计数）
+3. 定初值：每个信号量初值 = 初始可用数量
+4. 写代码：P 申请 / V 释放，同步 P 先于互斥 P
+5. 做检查：任一执行交错下不死锁、不违反约束
+</code></pre>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ P/V 顺序：先 P 同步信号量，再 P 互斥信号量；V 顺序无严格要求但习惯对称。</li>
+<li>⚠️ 读者—写者中 readcount 本身也是临界资源，需要 mutex 保护。</li>
+<li>⚠️ "value&lt;0 时阻塞"的 if 判断写错（注意是 &lt; 还是 ≤，P 用 &lt;0，V 用 ≤0）。</li>
+<li>⚠️ 变种题（2022/2025）：给的具体约束要翻译成额外信号量，别硬套模板。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li>三大模型达到"3 分钟默写无错"；</li>
+<li>精做 2010/2013/2016/2019/2022/2025 六道真题，感受从"经典"到"变种"的演变；</li>
+<li>每周自造一道同步题（如：理发店、公交车司机售票员、水果盘）并完整求解。</li>
+</ol>
+</article>
+<div class="pagenav"><a href="os-02.html">← OS-02 文件系统</a><span></span></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>

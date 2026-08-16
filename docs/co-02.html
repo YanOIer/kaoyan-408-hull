@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CO-02 指令流水线 · 408 知识凸包</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+<a class="logo" href="index.html">408<em>知识凸包</em></a>
+<nav>
+<a href="index.html#hull">凸包图</a>
+<a href="index.html#notes">顶点笔记</a>
+<a href="index.html#usage">使用建议</a>
+<a href="https://github.com/YanOIer/kaoyan-408-hull">GitHub</a>
+</nav>
+</div></header>
+
+<div class="wrap layout">
+<aside class="sidebar">
+<div class="group"><div class="gname" style="color:#c0392b"><span>■</span>数据结构</div>
+<a class="x" style="color:inherit" href="ds-01.html">DS-01 栈与队列应用</a>
+<a class="x" style="color:inherit" href="ds-02.html">DS-02 二叉树与BST</a>
+<a class="x" style="color:inherit" href="ds-03.html">DS-03 图算法</a>
+<a class="x" style="color:inherit" href="ds-04.html">DS-04 灵活算法设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#1f6f8b"><span>■</span>计算机组成原理</div>
+<a class="x" style="color:inherit" href="co-01.html">CO-01 指令系统设计</a>
+<a class="x on" style="color:inherit" href="co-02.html">CO-02 指令流水线</a>
+<a class="x" style="color:inherit" href="co-03.html">CO-03 Cache与存储层次</a>
+<a class="x" style="color:inherit" href="co-04.html">CO-04 CPU数据通路设计</a>
+</div>
+<div class="group"><div class="gname" style="color:#6a8e3f"><span>■</span>操作系统</div>
+<a class="x" style="color:inherit" href="os-01.html">OS-01 进程调度分析</a>
+<a class="x" style="color:inherit" href="os-02.html">OS-02 文件系统</a>
+<a class="x" style="color:inherit" href="os-03.html">OS-03 PV操作与进程同步</a>
+</div>
+<div class="group"><div class="gname" style="color:#b8860b"><span>■</span>计算机网络</div>
+<a class="x" style="color:inherit" href="cn-01.html">CN-01 时延计算</a>
+<a class="x" style="color:inherit" href="cn-02.html">CN-02 IP子网划分与路由聚合</a>
+<a class="x" style="color:inherit" href="cn-03.html">CN-03 TCP连接与拥塞控制</a>
+</div>
+<div class="group"><div class="gname" style="color:#8a857c"><span>■</span>真题数据</div>
+<a class="x" href="data-1.html">408计算机学科专业基础综合 · 历年考题分析汇</a>
+<a class="x" href="data-2.html">操作系统真题整理（2009—2026）</a>
+<a class="x" href="data-3.html">数据结构真题整理（2009—2026）</a>
+<a class="x" href="data-4.html">计算机组成原理真题整理（2009—2026）</a>
+<a class="x" href="data-5.html">计算机网络真题整理（2009—2026）</a>
+</div></aside>
+<main>
+<article class="article" style="border-top:4px solid #1f6f8b">
+<h1>CO-02 指令流水线</h1>
+<blockquote>
+<p>凸包顶点 · 组成原理 | 考频：3 次综合题（2012 / 2015 / 2018）| 难度：★★★★
+定位：组原计算的"左边界"，与数据通路互为犄角——一个管时间重叠，一个管空间连接。</p>
+</blockquote>
+<hr />
+<h2>一、为什么它是凸包顶点</h2>
+<p>流水线在凸包左缘：考频 3 次但几乎每次都以"计算 + 分析"出现，且是理解
+现代 CPU 的必经环节。它与数据通路（空间维度）共同框住组原 CPU 部分的上边界。</p>
+<hr />
+<h2>二、核心知识清单</h2>
+<h3>2.1 五段流水（408 标准模型）</h3>
+<pre><code>IF 取指 → ID 译码/取操作数 → EX 执行/算地址 → MEM 访存 → WB 写回
+</code></pre>
+<h3>2.2 性能指标（计算题三板斧）</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>公式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>执行时间（k 段，每段 Δt）</td>
+<td><strong>T = (k + n − 1)·Δt</strong></td>
+</tr>
+<tr>
+<td>吞吐率 TP</td>
+<td>n / T = n / [(k+n−1)·Δt]</td>
+</tr>
+<tr>
+<td>加速比 S</td>
+<td>T₀(串行) / T(流水) = n·k / (k+n−1)</td>
+</tr>
+<tr>
+<td>效率 E</td>
+<td>时空图占用面积 / 总面积 = n / (k+n−1)</td>
+</tr>
+</tbody>
+</table>
+<p>n → ∞ 时：S → k，TP → 1/Δt。
+<strong>段不均时</strong>：瓶颈段决定节奏，T = Σ各段时间 + (n−1)·max(各段时间)。</p>
+<h3>2.3 三种冒险（重点）</h3>
+<table>
+<thead>
+<tr>
+<th>冒险</th>
+<th>成因</th>
+<th>解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>结构冒险</strong></td>
+<td>硬件资源争用（如单口存储器取指与访存冲突）</td>
+<td>指令/数据 Cache 分离、多端口</td>
+</tr>
+<tr>
+<td><strong>数据冒险</strong></td>
+<td>后序指令需要前序未写回的结果（RAW）</td>
+<td><strong>转发/旁路 forwarding</strong>、阻塞 stall</td>
+</tr>
+<tr>
+<td><strong>控制冒险</strong></td>
+<td>转移指令改变 PC，已预取的指令作废</td>
+<td>分支预测、延迟槽、冲刷流水线</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键细节</strong>：
+- RAW（写后读）是真相关；WAR/WAW 在简单五段流水中不出现。
+- 有 forwarding 时，Load 指令紧接使用其结果仍需 <strong>停 1 拍</strong>（load-use 冒险）。
+- 无条件转移在 EX 段确定方向时，误取 2 条 → 罚 2 拍（看模型约定）。</p>
+<h3>2.4 CPI 与总时钟数</h3>
+<pre><code>实际 CPI = 理想 1 + 各类停顿/指令
+总时钟数 = n(指令数) + k − 1(充满) + 总停顿拍数
+</code></pre>
+<hr />
+<h2>三、典型考法</h2>
+<ol>
+<li><strong>流水时空图</strong>：画指令流水线图，数完成 n 条指令的总拍数。</li>
+<li><strong>冒险分析</strong>：给一段指令序列，指出哪两条指令间有何种冒险、停几拍。</li>
+<li><strong>性能计算</strong>：给段延迟求 T / TP / 加速比，或比较有无 forwarding 的差别。</li>
+<li><strong>超标量/超长指令字</strong>：选择题考概念（空间并行 vs 时间并行）。</li>
+</ol>
+<hr />
+<h2>四、易错点</h2>
+<ul>
+<li>⚠️ T = (k+n−1)Δt 是"段等长且每段一拍"的理想模型；段不等长时换公式。</li>
+<li>⚠️ "第几条指令在第几拍写回"要数格子，别只背公式。</li>
+<li>⚠️ Load-use 即使有旁路也要停一拍——最常考的扣分点。</li>
+<li>⚠️ 分支惩罚拍数取决于"哪一段确定转移结果"，题目模型不同答案不同。</li>
+<li>⚠️ 吞吐率单位：条指令/单位时间，别漏乘 Δt。</li>
+</ul>
+<hr />
+<h2>五、复习建议</h2>
+<ol>
+<li>画 3 张时空图：无冒险、有数据冒险（有无 forwarding 各一）、有控制冒险；</li>
+<li>精做 2012 / 2015 / 2018 流水线综合题，每题做到"讲给别人听"的程度；</li>
+<li>整理一页"冒险判定流程"：相邻指令 → 寄存器是否重叠 → 属于哪种相关 → 停几拍。</li>
+</ol>
+</article>
+<div class="pagenav"><a href="co-01.html">← CO-01 指令系统设计</a><a href="co-03.html">→ CO-03 Cache与存储层次</a></div>
+</main>
+</div>
+<footer class="footer"><div class="wrap">
+考研 408 知识凸包 · 基于 2009—2026 统考真题考频统计构建 ·
+<a href="https://github.com/YanOIer/kaoyan-408-hull">源代码与数据</a>
+</div></footer>
+</body></html>
